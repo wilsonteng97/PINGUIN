@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "512994099005",
+    "firebase_url": "https://earnest-episode-271004.firebaseio.com",
+    "project_id": "earnest-episode-271004",
+    "storage_bucket": "earnest-episode-271004.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512994099005:android:7903b2c0ea876f97404f54",
+        "android_client_info": {
+          "package_name": "com.cz2006.fitflop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512994099005-2oqq0jhhq95qphng59u6j9lisppipd4p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA03dVLG3evNCqq93U2yE_BvRhaf8v_BcQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512994099005-2oqq0jhhq95qphng59u6j9lisppipd4p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

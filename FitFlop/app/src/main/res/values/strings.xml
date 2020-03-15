@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">FitFlop</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- Google Maps API -->
+    <string name="google_map_api_key">AIzaSyCHAonUZ_dvX9ot_JNh6TM8piFVTqYorWQ</string>
+
+    <!-- Firestore Strings -->
+    <string name="collection_users">Users</string>
+    <string name="collection_chatroom_user_list">User List</string>
+    <string name="collection_user_locations">User Locations</string>
+
+</resources>
