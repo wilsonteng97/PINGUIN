@@ -3,7 +3,7 @@
     <string name="title_activity_maps">Map</string>
 
     <!-- Google Maps API -->
-    <string name="google_map_api_key">AIzaSyCHAonUZ_dvX9ot_JNh6TM8piFVTqYorWQ</string>
+    <string name="google_map_api_key">AIzaSyCwW6MrS8w2u6jSycShBQ0xiqoGbVvZGF4</string>
 
     <!-- Firestore Strings -->
     <string name="collection_users">Users</string>
