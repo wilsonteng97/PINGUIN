@@ -25,13 +25,26 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import static com.cz2006.fitflop.R.layout.activity_maps;
 
-public class MapsActivity extends Fragment {
+public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(activity_maps, container, false);
+        View view = inflater.inflate(activity_maps, container, false);
+
+        final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        myMAPF.getMapAsync(this);
+
+        return view;
     }
+
+    public void onMapReady(GoogleMap googleMap) {
+        // Display Singapore
+        LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
+    }
+
+
 //    LinearLayout dynamicContent, bottomNavBar;
 //    private GoogleMap mMap;
 //
