@@ -6,14 +6,14 @@ import com.cz2006.fitflop.model.User;
 
 public class UserClient extends Application {
 
-    private User user = null;
+    private static User user = null;
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public static void setUser(User givenUser) {
+        user = givenUser;
     }
 
 }

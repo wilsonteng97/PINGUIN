@@ -1,11 +1,13 @@
 package com.cz2006.fitflop.ui.screens;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -19,17 +21,22 @@ import androidx.fragment.app.Fragment;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
+import com.cz2006.fitflop.ui.LoginView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
+import java.util.Objects;
+
 import static com.cz2006.fitflop.R.layout.activity_profiles;
 
-public class ProfileActivity extends Fragment {
+public class ProfileActivity extends Fragment implements View.OnClickListener{
     private static final String TAG = "Profile Activity";
 
     private String name, email, BMI_string;
     private TextView nameView, emailView, BMIView;
     private double height, weight, BMI;
+    private Button logoutButton;
 
     @Nullable
     @Override
@@ -53,6 +60,10 @@ public class ProfileActivity extends Fragment {
         emailView = view.findViewById(R.id.emailAddress);
         BMIView = view.findViewById(R.id.calculated_BMI);
 
+        // Initialise Button
+        logoutButton = (Button) view.findViewById(R.id.logout_button);
+        logoutButton.setOnClickListener(this);
+
         // Set Data
         nameView.setText(name);
         emailView.setText(email);
@@ -65,6 +76,23 @@ public class ProfileActivity extends Fragment {
         BMIView.setText(Double.toString(BMI));
 
         return view;
+    }
+
+    private void signOut(){
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), LoginView.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.logout_button:
+                signOut();
+                break;
+        }
     }
 
 

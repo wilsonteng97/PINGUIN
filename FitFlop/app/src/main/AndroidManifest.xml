@@ -36,13 +36,19 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
 
-<!--        <activity android:name=".ui.LoginView" >-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
+        <activity android:name=".ui.LoginView" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+<!--        <activity android:name=".ui.LoginView"/>-->
+        <activity android:name=".ui.RegisterView" />
+        <activity android:name=".ui.MainView" />
+        <activity android:name=".ui.MapsActivity" />
+        <activity android:name=".ui.TestView" />
 
         <activity android:name=".ui.BaseActivity" >
             <intent-filter>
@@ -68,11 +74,7 @@
 <!--            </intent-filter>-->
 <!--        </activity>-->
 
-        <activity android:name=".ui.LoginView"/>
-        <activity android:name=".ui.RegisterView" />
-        <activity android:name=".ui.MainView" />
-        <activity android:name=".ui.MapsActivity" />
-        <activity android:name=".ui.TestView" />
+
 <!--        <activity android:name=".ui.btm_menu.BottomNavScreen"/>-->
 
         <!-- Add Google Maps API Key-->
@@ -87,6 +89,9 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+        <!-- Google Location Background Service-->
+        <service android:name=".services.GoogleLocationService"
+            android:stopWithTask="true" />
 
     </application>
 

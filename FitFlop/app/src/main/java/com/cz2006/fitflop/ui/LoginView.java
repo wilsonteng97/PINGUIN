@@ -114,7 +114,7 @@ public class LoginView extends AppCompatActivity implements
                     });
                     // can comment end -> ((UserClient)(getApplicationContext())).setUser(user);
 
-                    Intent intent = new Intent(LoginView.this, TestView.class);
+                    Intent intent = new Intent(LoginView.this, BaseActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                     finish();
@@ -164,7 +164,7 @@ public class LoginView extends AppCompatActivity implements
                     hideDialog();
                 }
             });
-        }else{
+        } else {
             Toast.makeText(LoginView.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -184,7 +184,6 @@ public class LoginView extends AppCompatActivity implements
             }
 
             case R.id.forget_password_link:{
-
                 final EditText resetMail = new EditText(view.getContext());
                 AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(view.getContext());
                 passwordResetDialog.setTitle("Reset Password?");
