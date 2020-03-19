@@ -81,6 +81,8 @@ public class RegisterView extends AppCompatActivity implements
                             user.setEmail(email);
                             user.setUsername(email.substring(0, email.indexOf("@")));
                             user.setUser_id(FirebaseAuth.getInstance().getUid());
+                            user.setHeight(0.0f);
+                            user.setWeight(0.0f);
 
                             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                                     .build();

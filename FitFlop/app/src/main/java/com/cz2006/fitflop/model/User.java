@@ -3,6 +3,8 @@ package com.cz2006.fitflop.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.common.cache.Weigher;
+
 public class User implements Parcelable{
 
     private String email;
@@ -10,11 +12,30 @@ public class User implements Parcelable{
     private String username;
     private String avatar;
 
+    private float height;
+    private float weight;
+    private boolean isHeightWeightInitialized;
+
     public User(String email, String user_id, String username, String avatar) {
         this.email = email;
         this.user_id = user_id;
         this.username = username;
         this.avatar = avatar;
+
+        this.height = 0.0f;
+        this.weight = 0.0f;
+        this.isHeightWeightInitialized = false;
+    }
+
+    public User(String email, String user_id, String username, String avatar, float height, float weight) {
+        this.email = email;
+        this.user_id = user_id;
+        this.username = username;
+        this.avatar = avatar;
+
+        this.height = height;
+        this.weight = weight;
+        this.isHeightWeightInitialized = true;
     }
 
     public User() {
@@ -76,14 +97,42 @@ public class User implements Parcelable{
         this.username = username;
     }
 
+    public float getHeight() {
+        return height;
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.height = weight;
+    }
+
+    public boolean isHeightWeightInitialized() {
+        return isHeightWeightInitialized;
+    }
+
+    public void setHeightWeightInitialized(boolean isHeightWeightInitialized) {
+        this.isHeightWeightInitialized = isHeightWeightInitialized;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
+        StringBuilder str = new StringBuilder();
+        str.append("User{" +
                 "email='" + email + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", username='" + username + '\'' +
-                ", avatar='" + avatar + '\'' +
-                '}';
+                ", avatar='" + avatar + '\'');
+        if (height+weight > 0) str.append(", height='" + height + '\'' +
+                                           ", weight='" + weight + '\'');
+        str.append('}');
+        return str.toString();
     }
 
     @Override
@@ -97,6 +146,8 @@ public class User implements Parcelable{
         dest.writeString(user_id);
         dest.writeString(username);
         dest.writeString(avatar);
+        dest.writeFloat(height);
+        dest.writeFloat(weight);
     }
 }
 
