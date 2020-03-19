@@ -100,4 +100,4 @@
         android:background="@android:color/white"
         android:layout_gravity="bottom">
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
