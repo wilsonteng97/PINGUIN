@@ -79,6 +79,13 @@ public class BaseActivity extends AppCompatActivity {
             }
         });
 
+        meo.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            @Override
+            public void onReselectItem(MeowBottomNavigation.Model item) {
+                // Do Nothing
+            }
+        });
+
 
 
 //        radioGroup1=(RadioGroup)findViewById(R.id.radioGroup1);
