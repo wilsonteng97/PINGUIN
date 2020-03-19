@@ -59,7 +59,6 @@ public class BaseActivity extends AppCompatActivity {
 
                 switch (item.getId()) {
                     case ID_STARRED:
-//                        if((selected_fragment.getClass().equals(new StarredActivity().getClass()))) System.out.println("true");
                         selected_fragment = new StarredActivity();
                         break;
                     case ID_NOTIFICATIONS:
