@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,24 +20,51 @@ import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 
+import org.w3c.dom.Text;
+
 import static com.cz2006.fitflop.R.layout.activity_profiles;
 
 public class ProfileActivity extends Fragment {
     private static final String TAG = "Profile Activity";
 
-    private String name = "";
-    private String email = "";
+    private String name, email, BMI_string;
+    private TextView nameView, emailView, BMIView;
+    private double height, weight, BMI;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(activity_profiles, container, false);
+
+        // FIXME -> For testing purposes only! (Need to get user data from the current user)
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
-        // FIXME -> For testing purposes only!
         if (user==null) {
             user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar");
         }
-        Log.d(TAG, "insertNewMessage: retrieved user client: " + user.toString());
-        return inflater.inflate(activity_profiles, container, false);
+        user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar");
+        //Log.d(TAG, "insertNewMessage: retrieved user client: " + user.toString());
+
+        // Get User Info
+        name = user.getUsername();
+        email = user.getEmail();
+
+        // Initialise Views
+        nameView = view.findViewById(R.id.userName);
+        emailView = view.findViewById(R.id.emailAddress);
+        BMIView = view.findViewById(R.id.calculated_BMI);
+
+        // Set Data
+        nameView.setText(name);
+        emailView.setText(email);
+
+        // FIXME --> temporary height and weight to calculate BMI, need to use user height and weight
+        height = 1.75;
+        weight = 60;
+        BMI = weight / (height * height);
+
+        BMIView.setText(Double.toString(BMI));
+
+        return view;
     }
 
 
