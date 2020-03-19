@@ -50,6 +50,7 @@ public class RegisterView extends AppCompatActivity implements
         mConfirmPassword = (EditText) findViewById(R.id.input_confirm_password);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        findViewById(R.id.login_link).setOnClickListener(this);
         findViewById(R.id.btn_register).setOnClickListener(this);
 
         mDb = FirebaseFirestore.getInstance();
@@ -145,6 +146,11 @@ public class RegisterView extends AppCompatActivity implements
     @Override
     public void onClick(View view) {
         switch (view.getId()){
+            case R.id.login_link:{
+                Intent intent = new Intent(RegisterView.this, LoginView.class);
+                startActivity(intent);
+                break;
+            }
             case R.id.btn_register:{
                 Log.d(TAG, "onClick: attempting to register.");
 
