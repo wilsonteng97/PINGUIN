@@ -31,7 +31,7 @@ public class ProfileActivity extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
-        // FIX ME -> For testing purposes only!
+        // FIXME -> For testing purposes only!
         if (user==null) {
             user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar");
         }
