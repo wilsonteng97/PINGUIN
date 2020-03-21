@@ -59,11 +59,14 @@ public class LoginView extends Fragment implements
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    Context context;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.login_view, container, false);
 
+        context = getActivity().getApplicationContext();
         mEmail = view.findViewById(R.id.email_login);
         mPassword = view.findViewById(R.id.password_login);
         mProgressBar = view.findViewById(R.id.progressBar);
@@ -151,7 +154,7 @@ public class LoginView extends Fragment implements
                             if(task.isSuccessful()){
                                 Log.d(TAG, "onComplete: successfully set the user client.");
                                 User user = task.getResult().toObject(User.class);
-                                ((UserClient)(getActivity().getApplicationContext())).setUser(user);
+                                ((UserClient)(context)).setUser(user);
                             }
                         }
                     });

@@ -1,5 +1,6 @@
 package com.cz2006.fitflop.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -51,9 +52,12 @@ public class RegisterView extends Fragment implements
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    Context context;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.register_view, container, false);
+        context = getActivity().getApplicationContext();
         mEmail = (EditText) view.findViewById(R.id.input_email);
         mPassword = (EditText) view.findViewById(R.id.input_password);
         mConfirmPassword = (EditText) view.findViewById(R.id.input_confirm_password);
@@ -165,7 +169,7 @@ public class RegisterView extends Fragment implements
     private void redirectLoginScreen(){
         Log.d(TAG, "redirectLoginScreen: redirecting to login screen.");
 
-        Intent intent = new Intent(getActivity(), LoginView.class);
+        Intent intent = new Intent(getActivity(), LoginRegActivity.class);
         startActivity(intent);
         getActivity().finish();
     }
@@ -189,11 +193,6 @@ public class RegisterView extends Fragment implements
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.login_link:{
-                Intent intent = new Intent(getActivity(), LoginView.class);
-                startActivity(intent);
-                break;
-            }
             case R.id.btn_register:{
                 Log.d(TAG, "onClick: attempting to register.");
 
