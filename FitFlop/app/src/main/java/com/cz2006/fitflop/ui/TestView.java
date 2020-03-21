@@ -27,7 +27,7 @@ public class TestView extends AppCompatActivity implements
         switch (view.getId()){
             case R.id.btn_test:{
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(TestView.this, LoginView.class);
+                Intent intent = new Intent(TestView.this, LoginRegActivity.class);
                 startActivity(intent);
                 break;
             }

@@ -1,16 +1,23 @@
 package com.cz2006.fitflop.ui;
 
-
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.model.User;
@@ -22,13 +29,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
-import javax.annotation.Nullable;
-
 import static android.text.TextUtils.isEmpty;
 import static com.cz2006.fitflop.util.Check.areStringsEqual;
 import static com.cz2006.fitflop.util.InAppNotifications.toastNotification;
+import static com.cz2006.fitflop.R.layout.register_view;
 
-public class RegisterView extends AppCompatActivity implements
+public class RegisterView extends Fragment implements
         View.OnClickListener
 {
     private static final String TAG = "RegisterActivity";
@@ -36,26 +42,61 @@ public class RegisterView extends AppCompatActivity implements
     //widgets
     private EditText mEmail, mPassword, mConfirmPassword;
     private ProgressBar mProgressBar;
+    private TextView register_link, login_link;
 
     //vars
     private FirebaseFirestore mDb;
 
+    Fragment fragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.register_view);
-        mEmail = (EditText) findViewById(R.id.input_email);
-        mPassword = (EditText) findViewById(R.id.input_password);
-        mConfirmPassword = (EditText) findViewById(R.id.input_confirm_password);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+    public View onCreateView(@NonNull LayoutInflater inflater, @androidx.annotation.Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.register_view, container, false);
+        mEmail = (EditText) view.findViewById(R.id.input_email);
+        mPassword = (EditText) view.findViewById(R.id.input_password);
+        mConfirmPassword = (EditText) view.findViewById(R.id.input_confirm_password);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        register_link = view.findViewById(R.id.register_link);
+        login_link = view.findViewById(R.id.login_link);
+        register_link.setPaintFlags(login_link.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-        findViewById(R.id.login_link).setOnClickListener(this);
-        findViewById(R.id.btn_register).setOnClickListener(this);
+        register_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment = new RegisterView();
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.fragment_login_reg,fragment);
+                fragmentTransaction.commit();
+
+                container.removeAllViews();
+            }
+        });
+
+        login_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment = new LoginView();
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_left_to_right, R.anim.exit_left_to_right, R.anim.enter_right_to_left, R.anim.exit_right_to_left);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.fragment_login_reg,fragment);
+                fragmentTransaction.commit();
+                container.removeAllViews();
+            }
+        });
+
+        view.findViewById(R.id.btn_register).setOnClickListener(this);
 
         mDb = FirebaseFirestore.getInstance();
 
         hideSoftKeyboard();
+
+        return view;
     }
 
     /**
@@ -101,7 +142,7 @@ public class RegisterView extends AppCompatActivity implements
                                         redirectLoginScreen();
                                     }else{
 //                                        View parentLayout = findViewById(android.R.id.content);
-                                        toastNotification(RegisterView.this, "Something went wrong. Task not successful lvl 2").show();
+                                        toastNotification(getActivity(), "Something went wrong. Task not successful lvl 2").show();
                                     }
                                 }
                             });
@@ -109,7 +150,7 @@ public class RegisterView extends AppCompatActivity implements
                         }
                         else {
 //                            View parentLayout = findViewById(android.R.id.content);
-                            toastNotification(RegisterView.this, "Something went wrong. Task not successful lvl 1").show();
+                            toastNotification(getActivity(), "Something went wrong. Task not successful lvl 1").show();
                             hideDialog();
                         }
 
@@ -124,9 +165,9 @@ public class RegisterView extends AppCompatActivity implements
     private void redirectLoginScreen(){
         Log.d(TAG, "redirectLoginScreen: redirecting to login screen.");
 
-        Intent intent = new Intent(RegisterView.this, LoginView.class);
+        Intent intent = new Intent(getActivity(), LoginView.class);
         startActivity(intent);
-        finish();
+        getActivity().finish();
     }
 
 
@@ -142,14 +183,14 @@ public class RegisterView extends AppCompatActivity implements
     }
 
     private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.login_link:{
-                Intent intent = new Intent(RegisterView.this, LoginView.class);
+                Intent intent = new Intent(getActivity(), LoginView.class);
                 startActivity(intent);
                 break;
             }
@@ -167,11 +208,11 @@ public class RegisterView extends AppCompatActivity implements
                         //Initiate registration task
                         registerNewEmail(mEmail.getText().toString(), mPassword.getText().toString());
                     }else{
-                        toastNotification(RegisterView.this, "Passwords do not Match").show();
+                        toastNotification(getActivity(), "Passwords do not Match").show();
                     }
 
                 }else{
-                    toastNotification(RegisterView.this, "You must fill out all the fields").show();
+                    toastNotification(getActivity(), "You must fill out all the fields").show();
                 }
                 break;
             }
