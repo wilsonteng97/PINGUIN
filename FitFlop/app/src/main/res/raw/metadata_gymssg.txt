@@ -1,0 +1,37 @@
+# Metadata for Gyms@SG
+---
+Identifier: 'a5d02518-5c68-4816-ba6a-bd101438f0eb'
+Name: 'gymssg'
+Title: 'Gyms@SG'
+Description: 'Location of exercise facilities around Singapore'
+Topics:
+  - 'Health'
+Keywords:
+  - 'Exercise'
+  - 'Fitness'
+  - 'OneMap'
+  - 'Physical activities'
+Publisher:
+  Name: 'Health Promotion Board'
+  Admin 1:
+    Name: 'Jeffrey Ng'
+    Department: 'HEALTH PROMOTION BOARD'
+    Email: 'admin@data.gov.sg'
+Sources:
+  - 'Health Promotion Board'
+License: 'https://data.gov.sg/open-data-licence'
+Frequency: 'Ad-hoc'
+Last Updated: '2019-10-09T11:46:25.199900'
+Resources:
+  -
+    Identifier: '3354e465-3ffb-4cb7-a3c5-d1a767af9415'
+    Title: 'Gyms@SG (KML)'
+    Url: 'https://geo.data.gov.sg/exercisefacilities/2018/12/12/kml/exercisefacilities.kml'
+    Format: 'KML'
+    Last Updated: '2018-12-11T16:00:00'
+  -
+    Identifier: '2f42dfca-6933-475b-85dc-60f4c57631c6'
+    Title: 'Gyms@SG (GEOJSON)'
+    Url: 'https://geo.data.gov.sg/exercisefacilities/2018/12/12/geojson/exercisefacilities.geojson'
+    Format: 'GeoJSON'
+    Last Updated: '2018-12-11T16:00:00'
