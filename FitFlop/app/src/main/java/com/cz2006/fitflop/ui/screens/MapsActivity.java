@@ -17,10 +17,12 @@ import androidx.fragment.app.Fragment;
 
 import com.cz2006.fitflop.R;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,8 +46,9 @@ import static com.cz2006.fitflop.R.layout.activity_maps;
 public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "MapsActivity";
-    private String apiPlacesKey = "AIzaSyDWMCbxmtQumcTuacPtZR4EW81RmEcnF0k";
+    private String apiPlacesKey = "AIzaSyDWMCbxmtQumcTuacPtZR4EW81RmEcnF0k"; //store this value in string resource file?
     PlacesClient placesClient;
+    private LatLng searched = new LatLng(1.27274, 103.602552); //default marker
 
     @Nullable
     @Override
@@ -55,25 +58,6 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
 
-        if (!Places.isInitialized()){
-            Places.initialize(getActivity().getApplicationContext(), apiPlacesKey);
-        }
-        placesClient = Places.createClient(getContext());
-        final AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
-        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                final LatLng latLng = place.getLatLng();
-                Log.i(TAG, "onPlaceSelected: "+latLng.latitude+"\n"+latLng.longitude);
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-
-            }
-        });
-
         return view;
     }
 
@@ -81,6 +65,8 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         // Display Singapore
         LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
+
+        searchPlaces(googleMap);
 
 //        try {
 //            KmlLayer layer = new KmlLayer(googleMap, R.raw.gyms_sg_kml, getActivity().getApplicationContext());
@@ -101,6 +87,31 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         }
 
 
+    }
+
+    public void searchPlaces(final GoogleMap googleMap){
+        if (!Places.isInitialized()){
+            Places.initialize(getActivity().getApplicationContext(), apiPlacesKey);
+        }
+        placesClient = Places.createClient(getContext());
+        final AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                searched = place.getLatLng();
+                Log.i(TAG, "onPlaceSelected: "+searched.latitude+"\n"+searched.longitude);
+                // FIXME: Add marker to searched location
+                googleMap.addMarker(new MarkerOptions().position(searched).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(searched, 30);
+                googleMap.animateCamera(yourLocation);
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
     }
 
 //    LinearLayout dynamicContent, bottomNavBar;

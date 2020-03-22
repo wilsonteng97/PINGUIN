@@ -5,6 +5,9 @@
     <!-- Google Maps API -->
     <string name="google_map_api_key">AIzaSyCwW6MrS8w2u6jSycShBQ0xiqoGbVvZGF4</string>
 
+    <!-- Google Places Autocomplete API -->
+    <string name="google_places_api_key">AIzaSyDWMCbxmtQumcTuacPtZR4EW81RmEcnF0k</string>
+
     <!-- Firestore Strings -->
     <string name="collection_users">Users</string>
     <string name="collection_chatroom_user_list">User List</string>
