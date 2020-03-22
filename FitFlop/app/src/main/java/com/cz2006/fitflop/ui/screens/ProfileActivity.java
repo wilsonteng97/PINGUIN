@@ -1,21 +1,16 @@
 package com.cz2006.fitflop.ui.screens;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.cz2006.fitflop.R;
@@ -23,8 +18,6 @@ import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.ui.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.w3c.dom.Text;
 
 import java.util.Objects;
 
@@ -34,9 +27,11 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
     private static final String TAG = "Profile Activity";
 
     private String name, email, BMI_string;
-    private TextView nameView, emailView, BMIView;
-    private double height, weight, BMI;
+    private TextView nameView, emailView, BMIView, heightView, weightView;
+    private EditText editHeight, editWeight;
+    private float height, weight, BMI;
     private Button logoutButton;
+    private Button editButton, saveButton;
 
     @Nullable
     @Override
@@ -46,34 +41,51 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         // FIXME -> For testing purposes only! (Need to get user data from the current user)
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
         if (user==null) {
-            user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar");
+            user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         }
-        user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar");
+        user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         //Log.d(TAG, "insertNewMessage: retrieved user client: " + user.toString());
 
-        // Get User Info
+        // Retrieve User Info from Database, Initialise Variables
         name = user.getUsername();
         email = user.getEmail();
+        height = user.getHeight();
+        weight = user.getWeight();
+        calculateBMI();
 
         // Initialise Views
-        nameView = view.findViewById(R.id.userName);
-        emailView = view.findViewById(R.id.emailAddress);
-        BMIView = view.findViewById(R.id.calculated_BMI);
+        nameView = (TextView)view.findViewById(R.id.userName);
+        emailView = (TextView)view.findViewById(R.id.emailAddress);
+        BMIView = (TextView)view.findViewById(R.id.calculated_BMI);
+        heightView = (TextView)view.findViewById(R.id.height_in_cm);
+        weightView = (TextView)view.findViewById(R.id.weight_in_kg);
+        editHeight = (EditText) view.findViewById(R.id.editHeight);
+        editWeight = (EditText) view.findViewById(R.id.editWeight);
 
-        // Initialise Button
+        // Initialise Buttons
         logoutButton = (Button) view.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(this);
+        editButton = (Button) view.findViewById(R.id.edit);
+        saveButton = (Button) view.findViewById(R.id.save);
+        editButton.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
 
-        // Set Data
+        // Set Data (Display on screen and update User info)
         nameView.setText(name);
         emailView.setText(email);
+        heightView.setText(Float.toString(height) + " m");
+        weightView.setText(Float.toString(weight) + " kg");
+        editHeight.setText(Float.toString(height));
+        editWeight.setText(Float.toString(weight));
+        BMIView.setText(Float.toString(BMI));
 
-        // FIXME --> temporary height and weight to calculate BMI, need to use user height and weight
-        height = 1.75;
-        weight = 60;
-        BMI = weight / (height * height);
+        saveButton.setVisibility(View.INVISIBLE);
+        editHeight.setVisibility(View.INVISIBLE);
+        editWeight.setVisibility(View.INVISIBLE);
 
-        BMIView.setText(Double.toString(BMI));
+        // FIXME : Update height and weight into database
+        user.setHeight(height);
+        user.setWeight(weight);
 
         return view;
     }
@@ -86,15 +98,54 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         getActivity().finish();
     }
 
-    @Override
+    // FIXME: 1. Keyboard not showing (must press and hold to edit)????; 2. Make buttons look nicer; 3. Update info into database!!
+
+    public void editButtonClicked(){
+        editHeight.setVisibility(View.VISIBLE);
+        editWeight.setVisibility(View.VISIBLE);
+        heightView.setVisibility(View.INVISIBLE);
+        weightView.setVisibility(View.INVISIBLE);
+        editButton.setVisibility(View.INVISIBLE);
+        saveButton.setVisibility(View.VISIBLE);
+
+        editHeight.setText(Float.toString(height));
+        editWeight.setText(Float.toString(weight));
+    }
+
+    public void saveButtonClicked(){
+        editHeight.setVisibility(View.INVISIBLE);
+        editWeight.setVisibility(View.INVISIBLE);
+        heightView.setVisibility(View.VISIBLE);
+        weightView.setVisibility(View.VISIBLE);
+        editButton.setVisibility(View.VISIBLE);
+        saveButton.setVisibility(View.INVISIBLE);
+
+        height = Float.parseFloat(editHeight.getText().toString()); //update height
+        weight = Float.parseFloat(editWeight.getText().toString()); //update weight
+        heightView.setText(Float.toString(height) + " m");
+        weightView.setText(Float.toString(weight) + " kg");
+        calculateBMI();
+        BMIView.setText(Float.toString(BMI));
+    }
+
+    //@Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logout_button:
                 signOut();
                 break;
+            case R.id.edit:
+                editButtonClicked();
+                break;
+            case R.id.save:
+                saveButtonClicked();
+                break;
         }
     }
 
+    private void calculateBMI(){
+        BMI = weight / (height * height);
+    }
 
 //    LinearLayout dynamicContent, bottomNavBar;
 //

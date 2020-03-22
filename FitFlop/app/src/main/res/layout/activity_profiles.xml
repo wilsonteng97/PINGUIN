@@ -129,6 +129,33 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="125dp">
+
+                <EditText
+                    android:id="@+id/editHeight"
+                    android:focusable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number|numberDecimal"
+                    />
+                <EditText
+                    android:id="@+id/editWeight"
+                    android:focusable="true"
+                    android:paddingTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number|numberDecimal"
+                    />
+
+            </LinearLayout>
+
             <Button
                 android:id="@+id/logout_button"
                 android:layout_width="40dp"
@@ -146,8 +173,25 @@
                 android:layout_centerHorizontal="true"
                 android:textSize="14sp"/>
 
-
         </RelativeLayout>
+
+        <Button
+            android:id="@+id/edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_edit_black_24dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="30dp"
+            />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_star_black_24dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="300dp"
+            />
 
     </RelativeLayout>
 
