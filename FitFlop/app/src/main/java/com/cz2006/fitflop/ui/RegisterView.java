@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+
+import es.dmoral.toasty.Toasty;
 
 import static android.text.TextUtils.isEmpty;
 import static com.cz2006.fitflop.util.Check.areStringsEqual;
@@ -146,7 +149,7 @@ public class RegisterView extends Fragment implements
                                         redirectLoginScreen();
                                     }else{
 //                                        View parentLayout = findViewById(android.R.id.content);
-                                        toastNotification(getActivity(), "Something went wrong. Task not successful lvl 2").show();
+                                        Toasty.error(getActivity(), "Something went wrong. Task not successful lvl 2", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
@@ -154,7 +157,7 @@ public class RegisterView extends Fragment implements
                         }
                         else {
 //                            View parentLayout = findViewById(android.R.id.content);
-                            toastNotification(getActivity(), "Something went wrong. Task not successful lvl 1").show();
+                            Toasty.error(getActivity(), "Something went wrong. Task not successful lvl 1", Toast.LENGTH_SHORT).show();
                             hideDialog();
                         }
 
@@ -207,11 +210,11 @@ public class RegisterView extends Fragment implements
                         //Initiate registration task
                         registerNewEmail(mEmail.getText().toString(), mPassword.getText().toString());
                     }else{
-                        toastNotification(getActivity(), "Passwords do not Match").show();
+                        Toasty.warning(getActivity(), "Passwords do not Match", Toast.LENGTH_SHORT).show();
                     }
 
                 }else{
-                    toastNotification(getActivity(), "You must fill out all the fields").show();
+                    Toasty.warning(getActivity(), "You must fill out all the fields", Toast.LENGTH_SHORT).show();
                 }
                 break;
             }

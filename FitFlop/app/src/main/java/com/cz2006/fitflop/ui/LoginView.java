@@ -37,6 +37,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import es.dmoral.toasty.Toasty;
+
 import static android.text.TextUtils.isEmpty;
 import static com.cz2006.fitflop.R.layout.login_view;
 
@@ -137,7 +139,7 @@ public class LoginView extends Fragment implements
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Toast.makeText(getActivity(), "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                    Toasty.success(getActivity(), "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                     // can comment start -> ((UserClient)(getApplicationContext())).setUser(user);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -206,12 +208,12 @@ public class LoginView extends Fragment implements
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show();
+                    Toasty.error(getActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                     hideDialog();
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
+            Toasty.warning(getActivity(), "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -239,12 +241,12 @@ public class LoginView extends Fragment implements
                         FirebaseAuth.getInstance().sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(getActivity(), "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                                Toasty.success(getActivity(), "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Error! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toasty.error(getActivity(), "Error! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

@@ -28,6 +28,7 @@ public class StartingUI extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(new Intent(StartingUI.this, LoginRegActivity.class));
+                finish();
             }
         }, 3000);
 

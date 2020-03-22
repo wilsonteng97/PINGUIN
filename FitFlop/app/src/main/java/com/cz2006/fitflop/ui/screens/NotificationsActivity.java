@@ -13,14 +13,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.cz2006.fitflop.R;
 
 import static com.cz2006.fitflop.R.layout.activity_notifications;
 
 public class NotificationsActivity extends Fragment {
+
+    RecyclerView notificationsRv;
+
+    public NotificationsActivity() {
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(activity_notifications, container, false);
+        View view = inflater.inflate(activity_notifications, container, false);
+
+        notificationsRv = view.findViewById(R.id.notificationsRv);
+        return view;
     }
 
 

@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,6 +44,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.cz2006.fitflop.Constants.ERROR_DIALOG_REQUEST;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
@@ -98,7 +101,7 @@ public class BaseActivity extends AppCompatActivity {
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
-                toastNotification(BaseActivity.this, "Clicked item" + item.getId()).show();
+                Toasty.info(BaseActivity.this, "Clicked item" + item.getId(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -174,7 +177,7 @@ public class BaseActivity extends AppCompatActivity {
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(BaseActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
-            toastNotification(BaseActivity.this, "You can't make map requests").show();
+            Toasty.warning(BaseActivity.this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
     }

@@ -21,6 +21,8 @@ import com.cz2006.fitflop.model.UserLocation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import es.dmoral.toasty.Toasty;
+
 import static com.cz2006.fitflop.Constants.ERROR_DIALOG_REQUEST;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
@@ -72,7 +74,7 @@ public class MainView extends AppCompatActivity {
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainView.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
         }else{
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
+            Toasty.warning(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
