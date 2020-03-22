@@ -10,4 +10,9 @@
     <string name="collection_chatroom_user_list">User List</string>
     <string name="collection_user_locations">User Locations</string>
 
+    <!-- Data.gov.sg API : Gyms@SG (Retrieved from "https://data.gov.sg/dataset/dataset-listing") -->
+    <string name="dataset_id">a5d02518-5c68-4816-ba6a-bd101438f0eb</string>
+    <string name="resource_id_KML">3354e465-3ffb-4cb7-a3c5-d1a767af9415</string>
+    <string name="resource_id_GEOJSON">2f42dfca-6933-475b-85dc-60f4c57631c6</string>
+
 </resources>

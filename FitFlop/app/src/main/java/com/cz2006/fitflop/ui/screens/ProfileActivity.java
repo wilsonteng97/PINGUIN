@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
+import com.cz2006.fitflop.ui.LoginRegActivity;
 import com.cz2006.fitflop.ui.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -92,7 +93,7 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
 
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
-        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), LoginView.class);
+        Intent intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), LoginRegActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         getActivity().finish();

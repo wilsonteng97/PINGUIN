@@ -2,6 +2,7 @@ package com.cz2006.fitflop.ui.screens;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.data.geojson.GeoJsonLayer;
+import com.google.maps.android.data.kml.KmlContainer;
+import com.google.maps.android.data.kml.KmlLayer;
+
+import org.json.JSONException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 
 import static com.cz2006.fitflop.R.layout.activity_maps;
 
 public class MapsActivity extends Fragment implements OnMapReadyCallback {
+
+    private static final String TAG = "MapsActivity";
 
     @Nullable
     @Override
@@ -42,8 +53,27 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         // Display Singapore
         LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
-    }
 
+//        try {
+//            KmlLayer layer = new KmlLayer(googleMap, R.raw.gyms_sg_kml, getActivity().getApplicationContext());
+//            layer.addLayerToMap();
+//        } catch (XmlPullParserException e) {
+//            Log.e(TAG,""+e.toString());
+//        } catch (IOException e) {
+//            Log.e(TAG,""+e.toString());
+//        }
+
+        try {
+            GeoJsonLayer layer = new GeoJsonLayer(googleMap, R.raw.gyms_sg_geojson, getActivity().getApplicationContext());
+            layer.addLayerToMap();
+        } catch (IOException e) {
+            Log.e(TAG,""+e.toString());
+        } catch (JSONException e) {
+            Log.e(TAG,""+e.toString());
+        }
+
+
+    }
 
 //    LinearLayout dynamicContent, bottomNavBar;
 //    private GoogleMap mMap;
