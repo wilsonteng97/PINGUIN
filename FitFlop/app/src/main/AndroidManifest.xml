@@ -9,6 +9,9 @@
     <!-- Ask user for fine_location permission -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- External Storage Permission -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- Specify requirement for OpenGL ES version 2 -->
+    <!-- Internet Permission -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
@@ -53,7 +56,8 @@
         </activity>
         <activity android:name=".ui.screens.MapsActivity" />
         <activity android:name=".ui.screens.NotificationsActivity" />
-        <activity android:name=".ui.screens.ProfileActivity" />
+        <activity android:name=".ui.screens.ProfileActivity">
+        </activity>
         <activity android:name=".ui.screens.SettingsActivity" />
         <activity android:name=".ui.screens.StarredActivity" /> <!-- <activity -->
         <!-- android:name=".MapsActivity" -->

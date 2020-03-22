@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.cz2006.fitflop.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,6 +24,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.data.geojson.GeoJsonLayer;
 import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
@@ -31,12 +37,15 @@ import org.json.JSONException;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static com.cz2006.fitflop.R.layout.activity_maps;
 
 public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
     private static final String TAG = "MapsActivity";
+    private String apiPlacesKey = "AIzaSyDWMCbxmtQumcTuacPtZR4EW81RmEcnF0k";
+    PlacesClient placesClient;
 
     @Nullable
     @Override
@@ -45,6 +54,25 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
 
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
+
+        if (!Places.isInitialized()){
+            Places.initialize(getActivity().getApplicationContext(), apiPlacesKey);
+        }
+        placesClient = Places.createClient(getContext());
+        final AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME));
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                final LatLng latLng = place.getLatLng();
+                Log.i(TAG, "onPlaceSelected: "+latLng.latitude+"\n"+latLng.longitude);
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+
+            }
+        });
 
         return view;
     }

@@ -17,7 +17,6 @@ import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.ui.LoginRegActivity;
-import com.cz2006.fitflop.ui.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
