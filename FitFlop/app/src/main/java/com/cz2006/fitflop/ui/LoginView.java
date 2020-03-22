@@ -1,18 +1,26 @@
 package com.cz2006.fitflop.ui;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Paint;
+import android.view.LayoutInflater;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentManager;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
@@ -29,10 +37,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
+import es.dmoral.toasty.Toasty;
+
 import static android.text.TextUtils.isEmpty;
+import static com.cz2006.fitflop.R.layout.login_view;
 
 
-public class LoginView extends AppCompatActivity implements
+public class LoginView extends Fragment implements
         View.OnClickListener
 {
 
@@ -44,25 +55,62 @@ public class LoginView extends AppCompatActivity implements
     // widgets
     private EditText mEmail, mPassword;
     private ProgressBar mProgressBar;
+    private TextView register_link, login_link;
 
+    Fragment fragment;
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
+    Context context;
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login_view);
-        mEmail = findViewById(R.id.email_login);
-        mPassword = findViewById(R.id.password_login);
-        mProgressBar = findViewById(R.id.progressBar);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.login_view, container, false);
+
+        context = getActivity().getApplicationContext();
+        mEmail = view.findViewById(R.id.email_login);
+        mPassword = view.findViewById(R.id.password_login);
+        mProgressBar = view.findViewById(R.id.progressBar);
+        register_link = view.findViewById(R.id.register_link);
+        login_link = view.findViewById(R.id.login_link);
+        login_link.setPaintFlags(login_link.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+        register_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment = new RegisterView();
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left, R.anim.enter_left_to_right, R.anim.exit_left_to_right);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.fragment_login_reg,fragment);
+                fragmentTransaction.commit();
+                container.removeAllViews();
+            }
+        });
+
+        login_link.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment = new LoginView();
+                fragmentManager = getFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.replace(R.id.fragment_login_reg,fragment);
+                fragmentTransaction.commit();
+                container.removeAllViews();
+            }
+        });
 
         setupFirebaseAuth();
-        findViewById(R.id.email_sign_in_button).setOnClickListener(this);
-        findViewById(R.id.register_link).setOnClickListener(this);
-        findViewById(R.id.forget_password_link).setOnClickListener(this);
+        view.findViewById(R.id.email_sign_in_button).setOnClickListener(this);
+        view.findViewById(R.id.forget_password_link).setOnClickListener(this);
 
         hideSoftKeyboard();
+
+        return view;
     }
-
-
-
 
     private void showDialog(){
         mProgressBar.setVisibility(View.VISIBLE);
@@ -76,7 +124,7 @@ public class LoginView extends AppCompatActivity implements
     }
 
     private void hideSoftKeyboard(){
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     /*
@@ -91,7 +139,7 @@ public class LoginView extends AppCompatActivity implements
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Toast.makeText(LoginView.this, "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                    Toasty.success(getActivity(), "Authenticated with: " + user.getEmail(), Toast.LENGTH_SHORT).show();
 
                     // can comment start -> ((UserClient)(getApplicationContext())).setUser(user);
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -108,16 +156,16 @@ public class LoginView extends AppCompatActivity implements
                             if(task.isSuccessful()){
                                 Log.d(TAG, "onComplete: successfully set the user client.");
                                 User user = task.getResult().toObject(User.class);
-                                ((UserClient)(getApplicationContext())).setUser(user);
+                                ((UserClient)(context)).setUser(user);
                             }
                         }
                     });
                     // can comment end -> ((UserClient)(getApplicationContext())).setUser(user);
 
-                    Intent intent = new Intent(LoginView.this, BaseActivity.class);
+                    Intent intent = new Intent(getActivity(), BaseActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-                    finish();
+                    getActivity().finish();
 
                 } else {
                     // User is signed out
@@ -160,24 +208,18 @@ public class LoginView extends AppCompatActivity implements
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(LoginView.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                    Toasty.error(getActivity(), "Authentication Failed", Toast.LENGTH_SHORT).show();
                     hideDialog();
                 }
             });
         } else {
-            Toast.makeText(LoginView.this, "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
+            Toasty.warning(getActivity(), "You didn't fill in all the fields.", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.register_link:{
-                Intent intent = new Intent(LoginView.this, RegisterView.class);
-                startActivity(intent);
-                break;
-            }
-
             case R.id.email_sign_in_button:{
                 signIn();
                 break;
@@ -199,12 +241,12 @@ public class LoginView extends AppCompatActivity implements
                         FirebaseAuth.getInstance().sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(LoginView.this, "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
+                                Toasty.success(getActivity(), "Reset Link Sent To Your Email.", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginView.this, "Error! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toasty.error(getActivity(), "Error! Reset Link is Not Sent" + e.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -221,4 +263,5 @@ public class LoginView extends AppCompatActivity implements
             }
         }
     }
+
 }
