@@ -60,7 +60,7 @@ import static com.cz2006.fitflop.R.layout.activity_maps;
 public class MapsActivity extends Fragment implements OnMapReadyCallback, LocationListener {
 
     private static final String TAG = "MapsActivity";
-    private String apiPlacesKey = "AIzaSyDWMCbxmtQumcTuacPtZR4EW81RmEcnF0k"; //store this value in string resource file?
+    private String apiPlacesKey; // Instantiated in OnCreate
     PlacesClient placesClient;
     private LatLng searched = new LatLng(1.27274, 103.602552); //default marker
 
@@ -73,7 +73,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(activity_maps, container, false);
-
+        apiPlacesKey = getActivity().getApplicationContext().getResources().getString(R.string.google_places_api_key);
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         myMAPF.getMapAsync(this);
 
