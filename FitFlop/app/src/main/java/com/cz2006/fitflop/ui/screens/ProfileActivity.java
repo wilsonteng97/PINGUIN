@@ -1,10 +1,13 @@
 package com.cz2006.fitflop.ui.screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,7 +20,6 @@ import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.ui.LoginRegActivity;
-import com.cz2006.fitflop.ui.LoginView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -63,6 +65,11 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         editHeight = (EditText) view.findViewById(R.id.editHeight);
         editWeight = (EditText) view.findViewById(R.id.editWeight);
 
+        // Set Data (Display on screen and update User info)
+        nameView.setText(name);
+        emailView.setText(email);
+        updateViews();
+
         // Initialise Buttons
         logoutButton = (Button) view.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(this);
@@ -70,19 +77,6 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         saveButton = (Button) view.findViewById(R.id.save);
         editButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
-
-        // Set Data (Display on screen and update User info)
-        nameView.setText(name);
-        emailView.setText(email);
-        heightView.setText(Float.toString(height) + " m");
-        weightView.setText(Float.toString(weight) + " kg");
-        editHeight.setText(Float.toString(height));
-        editWeight.setText(Float.toString(weight));
-        BMIView.setText(Float.toString(BMI));
-
-        saveButton.setVisibility(View.INVISIBLE);
-        editHeight.setVisibility(View.INVISIBLE);
-        editWeight.setVisibility(View.INVISIBLE);
 
         // FIXME : Update height and weight into database
         user.setHeight(height);
@@ -99,9 +93,7 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         getActivity().finish();
     }
 
-    // FIXME: 1. Keyboard not showing (must press and hold to edit)????; 2. Make buttons look nicer; 3. Update info into database!!
-
-    public void editButtonClicked(){
+    private void editButtonClicked(){
         editHeight.setVisibility(View.VISIBLE);
         editWeight.setVisibility(View.VISIBLE);
         heightView.setVisibility(View.INVISIBLE);
@@ -109,11 +101,17 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
 
-        editHeight.setText(Float.toString(height));
-        editWeight.setText(Float.toString(weight));
+        // FIXME: Buggy??? When keyboard is closed the screen is not updated
+        showSoftKeyboard(editHeight);
+        /*if (editHeight.isFocused()){
+            showSoftKeyboard(editHeight);
+        }
+        else if (editWeight.isFocused()){
+            showSoftKeyboard(editWeight);
+        }*/
     }
 
-    public void saveButtonClicked(){
+    private void saveButtonClicked(){
         editHeight.setVisibility(View.INVISIBLE);
         editWeight.setVisibility(View.INVISIBLE);
         heightView.setVisibility(View.VISIBLE);
@@ -121,12 +119,8 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.VISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
 
-        height = Float.parseFloat(editHeight.getText().toString()); //update height
-        weight = Float.parseFloat(editWeight.getText().toString()); //update weight
-        heightView.setText(Float.toString(height) + " m");
-        weightView.setText(Float.toString(weight) + " kg");
-        calculateBMI();
-        BMIView.setText(Float.toString(BMI));
+        this.height = Float.parseFloat(editHeight.getText().toString()); //update height
+        this.weight = Float.parseFloat(editWeight.getText().toString()); //update weight
     }
 
     //@Override
@@ -137,15 +131,37 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
                 break;
             case R.id.edit:
                 editButtonClicked();
+                updateViews();
                 break;
             case R.id.save:
                 saveButtonClicked();
+                updateViews();
                 break;
         }
     }
 
     private void calculateBMI(){
-        BMI = weight / (height * height);
+        this.BMI = this.weight / (this.height * this.height);
+    }
+
+    private void showSoftKeyboard(EditText text){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
+            imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
+        }
+    }
+    private void hideSoftKeyboard(){
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+    }
+
+    private void updateViews(){
+        editHeight.setText(Float.toString(this.height));
+        editWeight.setText(Float.toString(this.weight));
+        heightView.setText(Float.toString(this.height) + " m");
+        weightView.setText(Float.toString(this.weight) + " kg");
+        calculateBMI();
+        BMIView.setText(Float.toString(this.BMI));
     }
 
 //    LinearLayout dynamicContent, bottomNavBar;

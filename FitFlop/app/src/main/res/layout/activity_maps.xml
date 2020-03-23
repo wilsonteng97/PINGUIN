@@ -11,8 +11,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.MapsActivity" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_round"
+        android:layout_margin="20dp"
+        >
 
-    <SearchView
+    <fragment
+        android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+        android:id="@+id/autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <!--<SearchView
         android:id="@+id/location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,7 +35,7 @@
         android:iconifiedByDefault="false"
         android:layout_margin="10dp"
         android:elevation="5dp"
-        android:background="@drawable/bg_round"/>
+        android:background="@drawable/bg_round"/> -->
 
 
 </RelativeLayout>
