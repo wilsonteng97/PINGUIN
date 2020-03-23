@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentManager;
@@ -35,8 +34,6 @@ import es.dmoral.toasty.Toasty;
 
 import static android.text.TextUtils.isEmpty;
 import static com.cz2006.fitflop.util.Check.areStringsEqual;
-import static com.cz2006.fitflop.util.InAppNotifications.toastNotification;
-import static com.cz2006.fitflop.R.layout.register_view;
 
 public class RegisterView extends Fragment implements
         View.OnClickListener
@@ -172,7 +169,7 @@ public class RegisterView extends Fragment implements
     private void redirectLoginScreen(){
         Log.d(TAG, "redirectLoginScreen: redirecting to login screen.");
 
-        Intent intent = new Intent(getActivity(), LoginRegActivity.class);
+        Intent intent = new Intent(getActivity(), LoginRegView.class);
         startActivity(intent);
         getActivity().finish();
     }

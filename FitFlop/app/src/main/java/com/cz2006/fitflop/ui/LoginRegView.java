@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class LoginRegActivity extends AppCompatActivity {
+public class LoginRegView extends AppCompatActivity {
 
     Fragment fragment;
     FragmentManager fragmentManager;

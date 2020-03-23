@@ -41,6 +41,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    implementation 'com.firebaseui:firebase-ui-firestore:6.2.0'
     // CORE ANDROID
     // Material Components for Android
     implementation 'com.google.android.material:material:1.1.0'

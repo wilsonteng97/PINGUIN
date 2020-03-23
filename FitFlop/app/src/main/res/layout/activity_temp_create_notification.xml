@@ -31,6 +31,14 @@
             android:layout_marginBottom="5dp"
             android:id="@+id/messageNotification"/>
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Link to Activity"
+            android:inputType="text"
+            android:layout_marginBottom="5dp"
+            android:id="@+id/classLink"/>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

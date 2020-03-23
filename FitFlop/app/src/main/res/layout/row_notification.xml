@@ -38,10 +38,10 @@
                 android:textColor="@android:color/black"/>
 
             <TextView
-                android:id="@+id/notificationTv"
+                android:id="@+id/messageTv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Notification"
+                android:text="Message"
                 android:textColor="@android:color/black"/>
 
             <TextView
@@ -50,6 +50,8 @@
                 android:layout_height="wrap_content"
                 android:text="Time"
                 android:textColor="@android:color/black"/>
+
+
         </LinearLayout>
 
     </LinearLayout>

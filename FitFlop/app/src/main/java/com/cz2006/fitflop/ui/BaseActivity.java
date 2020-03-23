@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ProgressBar;
@@ -21,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
@@ -50,7 +50,6 @@ import es.dmoral.toasty.Toasty;
 import static com.cz2006.fitflop.Constants.ERROR_DIALOG_REQUEST;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
-import static com.cz2006.fitflop.util.InAppNotifications.toastNotification;
 
 public class BaseActivity extends AppCompatActivity {
 //    RadioGroup radioGroup1;
@@ -102,7 +101,12 @@ public class BaseActivity extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.ic_profile_black_24dp));
         meo.add(new MeowBottomNavigation.Model(5, R.drawable.ic_settings_black_24dp));
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsActivity()).commit();
+        if(getIntent().hasExtra("Notification_Fragment")){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsActivity()).commit();
+        }
+        else{
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsActivity()).commit();
+        }
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override

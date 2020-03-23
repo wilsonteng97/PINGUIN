@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cz2006.fitflop.R;
@@ -27,7 +25,7 @@ public class TestView extends AppCompatActivity implements
         switch (view.getId()){
             case R.id.btn_test:{
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(TestView.this, LoginRegActivity.class);
+                Intent intent = new Intent(TestView.this, LoginRegView.class);
                 startActivity(intent);
                 break;
             }

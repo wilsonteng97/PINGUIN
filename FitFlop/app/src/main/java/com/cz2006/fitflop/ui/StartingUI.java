@@ -27,7 +27,7 @@ public class StartingUI extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(StartingUI.this, LoginRegActivity.class));
+                startActivity(new Intent(StartingUI.this, LoginRegView.class));
                 finish();
             }
         }, 3000);
