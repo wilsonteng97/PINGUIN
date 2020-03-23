@@ -20,6 +20,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = "1.8"
+        targetCompatibility = 1.8
+    }
 
 }
 
@@ -56,6 +60,10 @@ dependencies {
     // UI
     // Meow bottom navigation bar
     implementation 'com.etebarian:meow-bottom-navigation-java:1.2.0'
+
+    // Other Dependencies
+    // jsoup HTML parser library @ https://jsoup.org/
+    implementation 'org.jsoup:jsoup:1.13.1'
 }
 apply plugin: 'com.android.application'
 // Google Services plugin

@@ -42,7 +42,7 @@ public class GoogleLocationService extends Service {
     private FusedLocationProviderClient mFusedLocationClient;
 //    private final static long UPDATE_INTERVAL = 4 * 1000;  // 4 secs
 //    private final static long FASTEST_INTERVAL = 2 * 1000; // 2 secs
-    
+
     // For testing
     private final static long UPDATE_INTERVAL = 10 * 1000;  // 4 secs
     private final static long FASTEST_INTERVAL = 10 * 1000; // 2 secs
@@ -111,6 +111,7 @@ public class GoogleLocationService extends Service {
                         if (location != null) {
                             User user = ((UserClient)(getApplicationContext())).getUser();
                             GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                            ((UserClient)(getApplicationContext())).setGeoPoint(geoPoint);
                             UserLocation userLocation = new UserLocation(user, geoPoint, null);
                             saveUserLocation(userLocation);
                         }
@@ -120,7 +121,6 @@ public class GoogleLocationService extends Service {
     }
 
     private void saveUserLocation(final UserLocation userLocation){
-
         try{
             DocumentReference locationRef = FirebaseFirestore.getInstance()
                     .collection(getString(R.string.collection_user_locations))

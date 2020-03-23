@@ -72,6 +72,12 @@ public class BaseActivity extends AppCompatActivity {
     // Btm Nav Bar
     MeowBottomNavigation meo;
     Fragment selected_fragment = null;
+    Fragment fragment_starred = null;
+    Fragment fragment_notifications = null;
+    Fragment fragment_home = null;
+    Fragment fragment_profile = null;
+    Fragment fragment_settings = null;
+
     private static final int ID_STARRED         = 1;
     private static final int ID_NOTIFICATIONS   = 2;
     private static final int ID_HOME            = 3;
@@ -108,24 +114,40 @@ public class BaseActivity extends AppCompatActivity {
         meo.setOnShowListener(new MeowBottomNavigation.ShowListener() {
             @Override
             public void onShowItem(MeowBottomNavigation.Model item) {
-
-                switch (item.getId()) {
-                    case ID_STARRED:
-                        selected_fragment = new StarredActivity();
-                        break;
-                    case ID_NOTIFICATIONS:
-                        selected_fragment = new NotificationsActivity();
-                        break;
-                    case ID_HOME:
-                        selected_fragment = new MapsActivity();
-                        break;
-                    case ID_PROFILE:
-                        selected_fragment = new ProfileActivity();
-                        break;
-                    case ID_SETTINGS:
-                        selected_fragment = new SettingsActivity();
-                        break;
-                }
+                    switch (item.getId()) {
+                        case ID_STARRED:
+                            if (fragment_starred==null) {
+                                selected_fragment = new StarredActivity(); fragment_starred = selected_fragment;
+                            }
+                            else selected_fragment = fragment_starred;
+                            break;
+                        case ID_NOTIFICATIONS:
+                            if (fragment_notifications==null) {
+                                selected_fragment = new NotificationsActivity(); fragment_notifications = selected_fragment;
+                            }
+                            else selected_fragment = fragment_notifications;
+                            break;
+                        case ID_HOME:
+                            if (fragment_home==null) {
+                                selected_fragment = new MapsActivity(); fragment_home = selected_fragment; Log.e(TAG, "DIE");
+                            }
+                            else {
+                                selected_fragment = fragment_home; Log.e(TAG, "NODIE");
+                            }
+                            break;
+                        case ID_PROFILE:
+                            if (fragment_profile==null) {
+                                selected_fragment = new ProfileActivity(); fragment_profile = selected_fragment;
+                            }
+                            else selected_fragment = fragment_profile;
+                            break;
+                        case ID_SETTINGS:
+                            if (fragment_settings==null) {
+                                selected_fragment = new SettingsActivity(); fragment_settings = selected_fragment;
+                            }
+                            else selected_fragment = fragment_settings;
+                            break;
+                    }
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected_fragment).commit();
             }
         });
@@ -133,7 +155,39 @@ public class BaseActivity extends AppCompatActivity {
         meo.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
             @Override
             public void onReselectItem(MeowBottomNavigation.Model item) {
-                // Do Nothing
+                switch (item.getId()) {
+                    case ID_STARRED:
+                        if (fragment_starred==null) {
+                            selected_fragment = new StarredActivity(); fragment_starred = selected_fragment;
+                        }
+                        else selected_fragment = fragment_starred;
+                        break;
+                    case ID_NOTIFICATIONS:
+                        if (fragment_notifications==null) {
+                            selected_fragment = new NotificationsActivity(); fragment_notifications = selected_fragment;
+                        }
+                        else selected_fragment = fragment_notifications;
+                        break;
+                    case ID_HOME:
+                        if (fragment_home==null) {
+                            selected_fragment = new MapsActivity(); fragment_home = selected_fragment;
+                        }
+                        else selected_fragment = fragment_home;
+                        break;
+                    case ID_PROFILE:
+                        if (fragment_profile==null) {
+                            selected_fragment = new ProfileActivity(); fragment_profile = selected_fragment;
+                        }
+                        else selected_fragment = fragment_profile;
+                        break;
+                    case ID_SETTINGS:
+                        if (fragment_settings==null) {
+                            selected_fragment = new SettingsActivity(); fragment_settings = selected_fragment;
+                        }
+                        else selected_fragment = fragment_settings;
+                        break;
+                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected_fragment).commit();
             }
         });
     }
