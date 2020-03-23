@@ -66,6 +66,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
         LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
 
+        // FIXME: Doesn't work once you click the home page??
         searchPlaces(googleMap);
 
 //        try {
@@ -101,7 +102,7 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback {
             public void onPlaceSelected(@NonNull Place place) {
                 searched = place.getLatLng();
                 Log.i(TAG, "onPlaceSelected: "+searched.latitude+"\n"+searched.longitude);
-                // FIXME: Add marker to searched location
+                // Add marker to searched location
                 googleMap.addMarker(new MarkerOptions().position(searched).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(searched, 30);
                 googleMap.animateCamera(yourLocation);

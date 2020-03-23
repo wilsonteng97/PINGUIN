@@ -1,10 +1,13 @@
 package com.cz2006.fitflop.ui.screens;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -100,7 +103,7 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
 
     // FIXME: 1. Keyboard not showing (must press and hold to edit)????; 2. Make buttons look nicer; 3. Update info into database!!
 
-    public void editButtonClicked(){
+    private void editButtonClicked(){
         editHeight.setVisibility(View.VISIBLE);
         editWeight.setVisibility(View.VISIBLE);
         heightView.setVisibility(View.INVISIBLE);
@@ -108,11 +111,20 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
 
+        if (editHeight.isFocused()){
+            showSoftKeyboard(editHeight);
+        }
+        else if (editWeight.isFocused()){
+            showSoftKeyboard(editWeight);
+        }else{
+            hideSoftKeyboard();
+        }
+
         editHeight.setText(Float.toString(height));
         editWeight.setText(Float.toString(weight));
     }
 
-    public void saveButtonClicked(){
+    private void saveButtonClicked(){
         editHeight.setVisibility(View.INVISIBLE);
         editWeight.setVisibility(View.INVISIBLE);
         heightView.setVisibility(View.VISIBLE);
@@ -145,6 +157,17 @@ public class ProfileActivity extends Fragment implements View.OnClickListener{
 
     private void calculateBMI(){
         BMI = weight / (height * height);
+    }
+
+    private void showSoftKeyboard(EditText text){
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
+            imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
+        }
+    }
+    private void hideSoftKeyboard(){
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
 //    LinearLayout dynamicContent, bottomNavBar;

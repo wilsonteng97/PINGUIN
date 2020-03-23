@@ -56,7 +56,8 @@
         </activity>
         <activity android:name=".ui.screens.MapsActivity" />
         <activity android:name=".ui.screens.NotificationsActivity" />
-        <activity android:name=".ui.screens.ProfileActivity">
+        <activity android:name=".ui.screens.ProfileActivity"
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".ui.screens.SettingsActivity" />
         <activity android:name=".ui.screens.StarredActivity" /> <!-- <activity -->

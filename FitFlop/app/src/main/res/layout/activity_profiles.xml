@@ -143,6 +143,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number|numberDecimal"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="flagNoEnterAction"
                     />
                 <EditText
                     android:id="@+id/editWeight"
@@ -152,6 +154,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number|numberDecimal"
+                    android:focusableInTouchMode="true"
+                    android:imeOptions="flagNoEnterAction"
                     />
 
             </LinearLayout>
