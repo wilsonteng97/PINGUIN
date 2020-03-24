@@ -26,6 +26,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -40,6 +41,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.maps.android.data.geojson.GeoJsonLayer;
 import com.google.maps.android.data.geojson.GeoJsonLineString;
+import com.google.maps.android.data.geojson.GeoJsonPointStyle;
 
 import org.json.JSONException;
 import org.jsoup.Jsoup;
@@ -84,18 +86,8 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
         this.googleMap = googleMap;
         LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
-
-                // FIXME: Doesn't work once you click the home page??
         searchPlaces(googleMap);
 
-//        try {
-//            KmlLayer layer = new KmlLayer(googleMap, R.raw.gyms_sg_kml, getActivity().getApplicationContext());
-//            layer.addLayerToMap();
-//        } catch (XmlPullParserException e) {
-//            Log.e(TAG,""+e.toString());
-//        } catch (IOException e) {
-//            Log.e(TAG,""+e.toString());
-//        }
     }
 
     @Override
@@ -139,19 +131,13 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
         Log.i(TAG, String.valueOf(location.getLongitude()));
 
         LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(userLocation))
-                .setTitle("Current Location");
+        googleMap.addMarker(new MarkerOptions().position(userLocation)).setTitle("Current Location");
         try {
             GeoJsonLayer layer = new GeoJsonLayer(googleMap, R.raw.gyms_sg_geojson, getActivity().getApplicationContext());
-            GeoJsonLayer near_layer = get_features_near_current_location(10000, googleMap, layer, location);
+            GeoJsonLayer near_layer = get_features_near_current_location(10000, googleMap, layer, location); //change bk to 10k
             near_layer.addLayerToMap();
-
-            // FIXME!
-//            for (GeoJsonFeature feature : layer.getFeatures()) {
-//                String description = feature.getProperty("Description");
-//                HashMap<String, String> hashmap = parse_html_table(description);
-//                Log.e(TAG, hashmap.toString());
-//            }
+            //Change icon
+            addColorsToMarkers(layer);
         } catch (IOException e) {
             Log.e(TAG, "" + e.toString());
         } catch (JSONException e) {
@@ -212,6 +198,25 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
         }
 
         return hashMap;
+    }
+
+    //to add color/change icon and change properties
+    private void addColorsToMarkers(GeoJsonLayer layer) {
+        for (GeoJsonFeature feature : layer.getFeatures()) {
+            GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
+            BitmapDescriptor pointIcon = BitmapDescriptorFactory.fromResource(R.drawable.cdumbbelltwo);
+            pointStyle.setIcon(pointIcon);
+            String description = feature.getProperty("Description");
+            HashMap<String, String> hashmap = parse_html_table(description);
+            for (String key : hashmap.keySet()) {
+                if(key.equals("NAME")){
+                    String value = hashmap.get("NAME");
+                    feature.setProperty(key,value);
+                    pointStyle.setTitle(feature.getProperty("NAME"));
+                }
+            }
+            feature.setPointStyle(pointStyle);
+        }
     }
 
     private LatLng getLatLngFromGeoJsonFeature(GeoJsonFeature feature) {
