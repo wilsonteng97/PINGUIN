@@ -26,7 +26,7 @@ import java.util.Objects;
 
 import static com.cz2006.fitflop.R.layout.activity_profiles;
 
-public class ProfileActivity extends Fragment implements View.OnClickListener{
+public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "Profile Activity";
 
     private String name, email, BMI_string;

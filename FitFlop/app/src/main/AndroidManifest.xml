@@ -59,13 +59,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.screens.MapsActivity" />
-        <activity android:name=".ui.screens.NotificationsActivity" />
+        <activity android:name=".ui.screens.NotificationsFragment" />
         <activity android:name=".ui.TempCreateNotification" />
-        <activity android:name=".ui.screens.ProfileActivity"
+        <activity android:name=".ui.screens.ProfileFragment"
             android:windowSoftInputMode="adjustPan">
         </activity>
-        <activity android:name=".ui.screens.SettingsActivity" />
-        <activity android:name=".ui.screens.StarredActivity" /> <!-- <activity -->
+        <activity android:name=".ui.screens.SettingsFragment" />
+        <activity android:name=".ui.screens.StarredFragment" /> <!-- <activity -->
         <!-- android:name=".MapsActivity" -->
         <!-- android:label="@string/title_activity_maps"> -->
         <!-- <intent-filter> -->

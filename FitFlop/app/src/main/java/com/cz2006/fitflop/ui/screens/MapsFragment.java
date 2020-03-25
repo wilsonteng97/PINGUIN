@@ -59,9 +59,9 @@ import static com.cz2006.fitflop.R.layout.activity_maps;
 import static com.cz2006.fitflop.logic.MapDistanceLogic.getDistance;
 
 
-public class MapsActivity extends Fragment implements OnMapReadyCallback, LocationListener {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
-    private static final String TAG = "MapsActivity";
+    private static final String TAG = "MapsFragment";
 
     private String apiPlacesKey; // Instantiated in OnCreate
     PlacesClient placesClient;

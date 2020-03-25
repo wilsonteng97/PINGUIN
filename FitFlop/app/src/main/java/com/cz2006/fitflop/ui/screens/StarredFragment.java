@@ -20,7 +20,7 @@ import java.util.ArrayList;
 
 import static com.cz2006.fitflop.R.layout.activity_starred;
 
-public class StarredActivity extends Fragment {
+public class StarredFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;

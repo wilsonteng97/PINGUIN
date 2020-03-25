@@ -26,11 +26,10 @@ import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.model.UserLocation;
 import com.cz2006.fitflop.services.GoogleLocationService;
-import com.cz2006.fitflop.ui.screens.MapsActivity;
-import com.cz2006.fitflop.ui.screens.NotificationsActivity;
-import com.cz2006.fitflop.ui.screens.ProfileActivity;
-import com.cz2006.fitflop.ui.screens.SettingsActivity;
-import com.cz2006.fitflop.ui.screens.StarredActivity;
+import com.cz2006.fitflop.ui.screens.NotificationsFragment;
+import com.cz2006.fitflop.ui.screens.ProfileFragment;
+import com.cz2006.fitflop.ui.screens.SettingsFragment;
+import com.cz2006.fitflop.ui.screens.StarredFragment;
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -101,7 +100,7 @@ public class BaseActivity extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(5, R.drawable.ic_settings_black_24dp));
 
         if(getIntent().hasExtra("Notification_Fragment")){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsActivity()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).commit();
         }
         else{
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsActivity()).commit();
@@ -120,13 +119,13 @@ public class BaseActivity extends AppCompatActivity {
                     switch (item.getId()) {
                         case ID_STARRED:
                             if (fragment_starred==null) {
-                                selected_fragment = new StarredActivity(); fragment_starred = selected_fragment;
+                                selected_fragment = new StarredFragment(); fragment_starred = selected_fragment;
                             }
                             else selected_fragment = fragment_starred;
                             break;
                         case ID_NOTIFICATIONS:
                             if (fragment_notifications==null) {
-                                selected_fragment = new NotificationsActivity(); fragment_notifications = selected_fragment;
+                                selected_fragment = new NotificationsFragment(); fragment_notifications = selected_fragment;
                             }
                             else selected_fragment = fragment_notifications;
                             break;
@@ -140,13 +139,13 @@ public class BaseActivity extends AppCompatActivity {
                             break;
                         case ID_PROFILE:
                             if (fragment_profile==null) {
-                                selected_fragment = new ProfileActivity(); fragment_profile = selected_fragment;
+                                selected_fragment = new ProfileFragment(); fragment_profile = selected_fragment;
                             }
                             else selected_fragment = fragment_profile;
                             break;
                         case ID_SETTINGS:
                             if (fragment_settings==null) {
-                                selected_fragment = new SettingsActivity(); fragment_settings = selected_fragment;
+                                selected_fragment = new SettingsFragment(); fragment_settings = selected_fragment;
                             }
                             else selected_fragment = fragment_settings;
                             break;
@@ -161,13 +160,13 @@ public class BaseActivity extends AppCompatActivity {
                 switch (item.getId()) {
                     case ID_STARRED:
                         if (fragment_starred==null) {
-                            selected_fragment = new StarredActivity(); fragment_starred = selected_fragment;
+                            selected_fragment = new StarredFragment(); fragment_starred = selected_fragment;
                         }
                         else selected_fragment = fragment_starred;
                         break;
                     case ID_NOTIFICATIONS:
                         if (fragment_notifications==null) {
-                            selected_fragment = new NotificationsActivity(); fragment_notifications = selected_fragment;
+                            selected_fragment = new NotificationsFragment(); fragment_notifications = selected_fragment;
                         }
                         else selected_fragment = fragment_notifications;
                         break;
@@ -179,13 +178,13 @@ public class BaseActivity extends AppCompatActivity {
                         break;
                     case ID_PROFILE:
                         if (fragment_profile==null) {
-                            selected_fragment = new ProfileActivity(); fragment_profile = selected_fragment;
+                            selected_fragment = new ProfileFragment(); fragment_profile = selected_fragment;
                         }
                         else selected_fragment = fragment_profile;
                         break;
                     case ID_SETTINGS:
                         if (fragment_settings==null) {
-                            selected_fragment = new SettingsActivity(); fragment_settings = selected_fragment;
+                            selected_fragment = new SettingsFragment(); fragment_settings = selected_fragment;
                         }
                         else selected_fragment = fragment_settings;
                         break;

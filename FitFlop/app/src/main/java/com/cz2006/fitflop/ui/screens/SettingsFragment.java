@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import static com.cz2006.fitflop.R.layout.activity_settings;
 
-public class SettingsActivity extends Fragment {
+public class SettingsFragment extends Fragment {
 
     @Nullable
     @Override

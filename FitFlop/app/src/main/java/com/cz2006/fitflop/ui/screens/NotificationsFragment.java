@@ -27,14 +27,14 @@ import java.text.SimpleDateFormat;
 
 import static com.cz2006.fitflop.R.layout.activity_notifications;
 
-public class NotificationsActivity extends Fragment implements View.OnClickListener{
+public class NotificationsFragment extends Fragment implements View.OnClickListener{
 
     private RecyclerView notificationsRv;
     private FirebaseFirestore firebaseFirestore;
     private FirestoreRecyclerAdapter adapter;
 
 
-    public NotificationsActivity() {
+    public NotificationsFragment() {
 
     }
 
