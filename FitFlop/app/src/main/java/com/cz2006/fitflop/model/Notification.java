@@ -18,10 +18,10 @@ public class Notification implements Parcelable {
     private String class_link;
     private Boolean hasRead;
 
-    public Notification(String user, String title, String notification, Date timestamp, String class_link, Boolean hasRead) {
+    public Notification(String user, String title, String message, Date timestamp, String class_link, Boolean hasRead) {
         this.user = user;
         this.title = title;
-        this.message = notification;
+        this.message = message;
         this.timestamp = timestamp;
         this.class_link = class_link;
         this.hasRead = hasRead;

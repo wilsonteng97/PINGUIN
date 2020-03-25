@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class NotificationsAdapter {
+public class CreateNotificationsAdapter {
 
     private static final String TAG = "NotificationsAdapter";
 

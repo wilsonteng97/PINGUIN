@@ -44,7 +44,7 @@ public class TempCreateNotification extends AppCompatActivity implements View.On
                 String link = mClassLink.getText().toString();
 
 
-                NotificationsAdapter NotificationsAdapter = new NotificationsAdapter();
+                CreateNotificationsAdapter NotificationsAdapter = new CreateNotificationsAdapter();
                 NotificationsAdapter.createNewNotifications(title, message, link);
 
             }

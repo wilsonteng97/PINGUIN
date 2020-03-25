@@ -26,6 +26,7 @@ import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.model.UserLocation;
 import com.cz2006.fitflop.services.GoogleLocationService;
+import com.cz2006.fitflop.ui.screens.MapsFragment;
 import com.cz2006.fitflop.ui.screens.NotificationsFragment;
 import com.cz2006.fitflop.ui.screens.ProfileFragment;
 import com.cz2006.fitflop.ui.screens.SettingsFragment;
@@ -103,7 +104,7 @@ public class BaseActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).commit();
         }
         else{
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsActivity()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
         }
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
@@ -131,7 +132,7 @@ public class BaseActivity extends AppCompatActivity {
                             break;
                         case ID_HOME:
                             if (fragment_home==null) {
-                                selected_fragment = new MapsActivity(); fragment_home = selected_fragment; Log.e(TAG, "DIE");
+                                selected_fragment = new MapsFragment(); fragment_home = selected_fragment; Log.e(TAG, "DIE");
                             }
                             else {
                                 selected_fragment = fragment_home; Log.e(TAG, "NODIE");
@@ -172,7 +173,7 @@ public class BaseActivity extends AppCompatActivity {
                         break;
                     case ID_HOME:
                         if (fragment_home==null) {
-                            selected_fragment = new MapsActivity(); fragment_home = selected_fragment;
+                            selected_fragment = new MapsFragment(); fragment_home = selected_fragment;
                         }
                         else selected_fragment = fragment_home;
                         break;

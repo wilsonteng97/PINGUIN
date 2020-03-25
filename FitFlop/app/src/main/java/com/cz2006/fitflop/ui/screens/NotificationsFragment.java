@@ -7,31 +7,48 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.model.Notification;
+import com.cz2006.fitflop.ui.NotificationsRecyclerViewAdapter;
 import com.cz2006.fitflop.ui.TempCreateNotification;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.core.OrderBy;
+import com.google.firestore.v1.StructuredQuery;
+
+import org.w3c.dom.Document;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 import static com.cz2006.fitflop.R.layout.activity_notifications;
 
 public class NotificationsFragment extends Fragment implements View.OnClickListener{
 
     private RecyclerView notificationsRv;
-    private FirebaseFirestore firebaseFirestore;
-    private FirestoreRecyclerAdapter adapter;
+    private NotificationsRecyclerViewAdapter adapter;
+    private ArrayList<Notification> list;
+    private FirebaseFirestore db;
+    private RecyclerView.LayoutManager layoutManager;
 
 
     public NotificationsFragment() {
@@ -43,39 +60,34 @@ public class NotificationsFragment extends Fragment implements View.OnClickListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(activity_notifications, container, false);
 
-        notificationsRv = view.findViewById(R.id.notificationsRv);
         view.findViewById(R.id.postNotification).setOnClickListener(this);
-
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        notificationsRv = (RecyclerView) view.findViewById(R.id.notificationsRv);
+        db = FirebaseFirestore.getInstance();
         String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        Query query = firebaseFirestore.collection("Notifications").whereEqualTo("user", user);
-        FirestoreRecyclerOptions<Notification> notifications = new FirestoreRecyclerOptions.Builder<Notification>()
-                .setQuery(query, Notification.class)
-                .build();
-
-        adapter = new FirestoreRecyclerAdapter<Notification, NotificationViewHolder>(notifications) {
-            @NonNull
+        db.collection("Notifications").whereEqualTo("user", user).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_notification, parent, false);
-                return new NotificationViewHolder(view);
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                list = new ArrayList<Notification>();
+                if(task.isSuccessful()){
+                    for (QueryDocumentSnapshot querySnapshot : task.getResult()){
+                        Notification n = new Notification(querySnapshot.getString("user"), querySnapshot.getString("title"), querySnapshot.getString("message"),
+                                querySnapshot.getDate("timestamp"), querySnapshot.getString("class_link"), querySnapshot.getBoolean("hasRead"));
+
+                        list.add(n);
+                    }
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(), "FAILED", Toast.LENGTH_SHORT).show();
+                }
             }
+        });
 
-            @Override
-            protected void onBindViewHolder(@NonNull NotificationViewHolder holder, int position, @NonNull Notification model) {
-                holder.titleTv.setText(model.getTitle());
-                holder.messageTv.setText(model.getMessage());
-
-                SimpleDateFormat spf = new SimpleDateFormat("MMM dd, yyyy");
-                String date = spf.format(model.getTimestamp());
-                holder.timeTv.setText(date);
-            }
-        };
-
-        notificationsRv.setHasFixedSize(true);
+        adapter = new NotificationsRecyclerViewAdapter(getActivity().getApplicationContext(), list);
         notificationsRv.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationsRv.setAdapter(adapter);
+        notificationsRv.setHasFixedSize(true);
+        notificationsRv.setItemAnimator(new DefaultItemAnimator());
+
         return view;
     }
 
@@ -87,32 +99,6 @@ public class NotificationsFragment extends Fragment implements View.OnClickListe
                 startActivity(intent);
             }
         }
-    }
-
-    private class NotificationViewHolder extends RecyclerView.ViewHolder {
-
-        private ImageView iconIv;
-        private TextView titleTv, messageTv, timeTv;
-
-        public NotificationViewHolder(@NonNull View itemView) {
-            super(itemView);
-            iconIv = itemView.findViewById(R.id.iconIv);
-            titleTv = itemView.findViewById(R.id.titleTv);
-            timeTv = itemView.findViewById(R.id.timeTv);
-            messageTv = itemView.findViewById(R.id.messageTv);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        adapter.stopListening();;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        adapter.startListening();;
     }
 
 //    LinearLayout dynamicContent, bottomNavBar;
