@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.maps.android.data.Feature;
 import com.google.maps.android.data.geojson.GeoJsonFeature;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -59,14 +60,25 @@ import static com.cz2006.fitflop.R.layout.activity_maps;
 public class MapsActivity extends Fragment implements OnMapReadyCallback, LocationListener {
 
     private static final String TAG = "MapsActivity";
+    private static final double EARTH_RADIUS = 6371000; //meters
+
     private String apiPlacesKey; // Instantiated in OnCreate
     PlacesClient placesClient;
     private LatLng searched = new LatLng(1.27274, 103.602552); //default marker
 
+    private static LocationManager mLocationManager;
+    private static LatLng current_user_location;
     private static GoogleMap googleMap;
-    private LocationManager mLocationManager;
+    private static GeoJsonLayer layer;
+    private static GeoJsonLayer near_layer = null;
 
-    private static final double EARTH_RADIUS = 6371000; //meters
+    // Widgets/Resources
+    private static SeekBar seekBar;
+    private static TextView progressShow;
+    private static BitmapDescriptor pointIcon;
+
+
+
 
     @Nullable
     @Override
@@ -74,8 +86,60 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
         View view = inflater.inflate(activity_maps, container, false);
         apiPlacesKey = getActivity().getApplicationContext().getResources().getString(R.string.google_places_api_key);
         final SupportMapFragment myMAPF = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        myMAPF.getMapAsync(this);
+        pointIcon = BitmapDescriptorFactory.fromResource(R.drawable.cdumbbelltwo);
+        seekBar = (SeekBar) view.findViewById(R.id.seekBar);
+        progressShow = (TextView) view.findViewById(R.id.textView);
+        progressShow.setText("<Drag the slider to see facilities near you!>");
 
+        try {
+            layer = new GeoJsonLayer(googleMap, R.raw.gyms_sg_geojson, getActivity().getApplicationContext());
+            addColorsToMarkers(layer);
+        } catch (IOException e) {
+            Log.e(TAG, "" + e.toString());
+        } catch (JSONException e) {
+            Log.e(TAG, "" + e.toString());
+        }
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            double prev_progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                double kilometres = seekBar.getProgress();
+
+                try {
+                    if (near_layer!=null) near_layer.removeLayerFromMap();
+                    near_layer = get_features_near_current_location(googleMap, layer, kilometres * 1000);
+//                    Log.i(TAG, near_layer.getFeatures().toString());
+                    near_layer.addLayerToMap();
+                    near_layer.setOnFeatureClickListener(new GeoJsonLayer.OnFeatureClickListener() {
+                        @Override
+                        public void onFeatureClick(Feature feature) {
+                            Log.e(TAG, "Feature clicked: " + feature.getProperty("NAME"));
+                        }
+                    });
+                } catch (IOException e) {
+                    Log.e(TAG, "" + e.toString());
+                } catch (JSONException e) {
+                    Log.e(TAG, "" + e.toString());
+                }
+
+                progressShow.setText("Facilities " + (int) kilometres + "km around you!");
+                prev_progress = kilometres;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        myMAPF.getMapAsync(this);
         return view;
     }
 
@@ -124,22 +188,10 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i(TAG, String.valueOf(location.getLatitude()));
-        Log.i(TAG, String.valueOf(location.getLongitude()));
+        Log.i(TAG, String.valueOf(location.getLatitude()) + " | " + String.valueOf(location.getLongitude()));
 
-        LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        googleMap.addMarker(new MarkerOptions().position(userLocation)).setTitle("Current Location");
-        try {
-            GeoJsonLayer layer = new GeoJsonLayer(googleMap, R.raw.gyms_sg_geojson, getActivity().getApplicationContext());
-            GeoJsonLayer near_layer = get_features_near_current_location(googleMap, layer, location); //change bk to 10k
-            near_layer.addLayerToMap();
-            //Change icon
-            addColorsToMarkers(layer);
-        } catch (IOException e) {
-            Log.e(TAG, "" + e.toString());
-        } catch (JSONException e) {
-            Log.e(TAG, "" + e.toString());
-        }
+        current_user_location = new LatLng(location.getLatitude(), location.getLongitude());
+        googleMap.addMarker(new MarkerOptions().position(current_user_location)).setTitle("Current Location");
     }
 
     @Override
@@ -201,20 +253,20 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
     private void addColorsToMarkers(GeoJsonLayer layer) {
         for (GeoJsonFeature feature : layer.getFeatures()) {
             GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
-            BitmapDescriptor pointIcon = BitmapDescriptorFactory.fromResource(R.drawable.cdumbbelltwo);
             pointStyle.setIcon(pointIcon);
             String description = feature.getProperty("Description");
             HashMap<String, String> hashmap = parse_html_table(description);
             for (String key : hashmap.keySet()) {
-                if(key.equals("NAME")){
+                if (key.equals("NAME")) {
                     String value = hashmap.get("NAME");
-                    feature.setProperty(key,value);
+                    feature.setProperty(key, value);
                     pointStyle.setTitle(feature.getProperty("NAME"));
                 }
             }
             feature.setPointStyle(pointStyle);
         }
     }
+
 
     private LatLng getLatLngFromGeoJsonFeature(GeoJsonFeature feature) {
         String[] coord_str = feature.getGeometry().getGeometryObject().toString().split(",");
@@ -224,44 +276,17 @@ public class MapsActivity extends Fragment implements OnMapReadyCallback, Locati
         LatLng latlng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
         return latlng;
     }
-    //update here, can just move the seekBar around if you find a better place to put
-    private GeoJsonLayer get_features_near_current_location(GoogleMap googleMap, GeoJsonLayer layer, Location location) throws IOException, JSONException {
-        LatLng current_user_location = new LatLng(location.getLatitude(), location.getLongitude());
-        
-        SeekBar seekBar = (SeekBar) getView().findViewById(R.id.seekBar);
-        int progress = seekBar.getProgress();
-        double metres = progress * 1000;
-        TextView progressShow = (TextView) getView().findViewById(R.id.textView);
-        progressShow.setText("Progress: " + progress);
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress = seekBar.getProgress();
-            }
 
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
-
+    private GeoJsonLayer get_features_near_current_location(GoogleMap googleMap, GeoJsonLayer layer,
+                                                            double metres)
+            throws IOException, JSONException {
+        LatLng user_location = current_user_location;
         GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
-        if(new_layer!=null){
-            new_layer.removeLayerFromMap();
-        }
+
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
-            if (is_feature_near(metres, feature_location, current_user_location)) {
+            if (is_feature_near(metres, feature_location, user_location)) {
                 new_layer.addFeature(feature);
-            }
-            //added else to removeFeature but it doesnt work because it doesn't remove the map and re-add
-            else{
-                new_layer.removeFeature(feature);
             }
         }
         return new_layer;
