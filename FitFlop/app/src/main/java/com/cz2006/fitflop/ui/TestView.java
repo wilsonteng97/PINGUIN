@@ -1,7 +1,6 @@
 package com.cz2006.fitflop.ui;
 
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.view.View;
 

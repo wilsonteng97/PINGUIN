@@ -1,13 +1,13 @@
 package com.cz2006.fitflop.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import com.cz2006.fitflop.R;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.cz2006.fitflop.R;
 
 import java.util.Timer;
 import java.util.TimerTask;

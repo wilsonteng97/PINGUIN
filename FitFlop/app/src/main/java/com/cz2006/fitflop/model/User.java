@@ -3,8 +3,6 @@ package com.cz2006.fitflop.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.common.cache.Weigher;
-
 public class User implements Parcelable{
 
     private String email;

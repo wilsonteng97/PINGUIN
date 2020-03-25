@@ -2,11 +2,11 @@ package com.cz2006.fitflop.ui;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Paint;
-import android.view.LayoutInflater;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -19,8 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
@@ -40,7 +40,6 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import es.dmoral.toasty.Toasty;
 
 import static android.text.TextUtils.isEmpty;
-import static com.cz2006.fitflop.R.layout.login_view;
 
 
 public class LoginView extends Fragment implements

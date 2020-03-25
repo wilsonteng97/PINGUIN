@@ -1,25 +1,13 @@
 package com.cz2006.fitflop.ui;
 
-import android.content.Context;
-import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.Notification;
-import com.cz2006.fitflop.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-
-import es.dmoral.toasty.Toasty;
 
 public class NotificationsAdapter {
 
