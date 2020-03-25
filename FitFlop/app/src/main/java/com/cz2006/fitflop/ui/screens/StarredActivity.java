@@ -1,30 +1,79 @@
 package com.cz2006.fitflop.ui.screens;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.ui.StarredAdapter;
+import com.cz2006.fitflop.ui.StarredItem;
+
+import java.util.ArrayList;
 
 import static com.cz2006.fitflop.R.layout.activity_starred;
 
 public class StarredActivity extends Fragment {
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(activity_starred, container, false);
+        View view = inflater.inflate(activity_starred, container, false);
+
+        ArrayList<StarredItem> starredItems = new ArrayList<>();
+        starredItems.add(new StarredItem("Name1", "Address1"));
+        starredItems.add(new StarredItem("Name2", "Address2"));
+        starredItems.add(new StarredItem("Name3", "Address3"));
+        starredItems.add(new StarredItem("Name4", "Address4"));
+        starredItems.add(new StarredItem("Name5", "Address5"));
+        starredItems.add(new StarredItem("Name6", "Address6"));
+        starredItems.add(new StarredItem("Name7", "Address7"));
+        starredItems.add(new StarredItem("Name8", "Address8"));
+        starredItems.add(new StarredItem("Name9", "Address9"));
+        starredItems.add(new StarredItem("Name10", "Address10"));
+
+        mRecyclerView = view.findViewById(R.id.recycler_view);
+        //mRecyclerView.setHasFixedSize(true); //if you know that recycler view in xml layout will not change in size no matter how many items are inside
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mAdapter = new StarredAdapter(starredItems);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        return view;
     }
+
+
+
+
+
+
+
 //    LinearLayout dynamicContent, bottomNavBar;
 //
 //    @Override
