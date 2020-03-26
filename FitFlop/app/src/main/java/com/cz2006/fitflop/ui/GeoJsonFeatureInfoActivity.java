@@ -1,5 +1,6 @@
 package com.cz2006.fitflop.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,9 @@ import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;
@@ -23,12 +27,17 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // FIXME: Pass in the data from GeoJson here instead of hardcoding
-        GeoJsonFeatureHashMapInfo geojsoninfo = ((UserClient) getApplicationContext()).getGeoJsonFeatureInfo();
-        // TODO: Create a getMasterKey method in GeoJsonFeatureHashMapInfo, where the master key is stored upon double clicking the location
-        // geojsoninfo.getMasterKey();
-        // TODO: then save the information about that particular location as a Hash Map (map) in this class
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if(extras.containsKey("NAME")) {
+            masterKey = intent.getStringExtra("NAME");
+        }
 
+        // FIXME: Pass in the data from GeoJson here instead of hardcoding
+        GeoJsonFeatureHashMapInfo geoJsonInfo = ((UserClient) getApplicationContext()).getGeoJsonFeatureInfo();
+        // TODO: Create a getMasterKey method in GeoJsonFeatureHashMapInfo, where the master key is stored upon double clicking the location
+        HashMap<String, String> infoHashMap = geoJsonInfo.getInfo(masterKey);
+        // TODO: then save the information about that particular location as a Hash Map (map) in this class
         /*GymName = map.get("NAME").toString();
         Description = map.get("DESCRIPTION").toString();
         StreetName = map.get("ADDRESSSTREETNAME").toString();
