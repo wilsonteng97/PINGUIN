@@ -12,4 +12,16 @@
         android:scrollbars="vertical"
         android:background="#F3F3F3"/>
 
+    <Button
+        android:id="@+id/insert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="insert"/>
+    <Button
+        android:id="@+id/remove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="remove"
+        android:layout_alignParentEnd="true"/>
+
 </RelativeLayout>
