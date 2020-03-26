@@ -145,7 +145,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void calculateBMI(){
-        this.BMI = this.weight / (this.height * this.height);
+        this.BMI = this.weight / (this.height/100 * this.height/100);
     }
 
     private void showSoftKeyboard(EditText text){
@@ -163,8 +163,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
         editHeight.setText(Float.toString(user.getHeight()));
         editWeight.setText(Float.toString(user.getWeight()));
-        heightView.setText(Float.toString(user.getHeight()) + " m");
-        weightView.setText(Float.toString(user.getWeight()) + " kg");
+        heightView.setText(Float.toString(user.getHeight()));
+        weightView.setText(Float.toString(user.getWeight()));
         calculateBMI();
         BMIView.setText(Float.toString(this.BMI));
     }
