@@ -65,7 +65,8 @@
             android:windowSoftInputMode="adjustPan">
         </activity>
         <activity android:name=".ui.screens.SettingsFragment" />
-        <activity android:name=".ui.screens.StarredFragment" /> <!-- <activity -->
+        <activity android:name=".ui.screens.StarredFragment" />
+        <activity android:name=".ui.GeoJsonFeatureInfoActivity" /> <!-- <activity -->
         <!-- android:name=".MapsActivity" -->
         <!-- android:label="@string/title_activity_maps"> -->
         <!-- <intent-filter> -->
