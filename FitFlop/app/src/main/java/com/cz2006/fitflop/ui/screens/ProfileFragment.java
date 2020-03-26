@@ -46,7 +46,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         if (user==null) {
             user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         }
-        user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         //Log.d(TAG, "insertNewMessage: retrieved user client: " + user.toString());
 
         // Retrieve User Info from Database, Initialise Variables

@@ -255,12 +255,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             String description = feature.getProperty("Description");
             HashMap<String, String> hashmap = parse_html_table(description);
             for (String key : hashmap.keySet()) {
-                if (key.equals("NAME")) {
-                    String value = hashmap.get("NAME");
-                    feature.setProperty(key, value);
-                    pointStyle.setTitle(feature.getProperty("NAME"));
-                }
+//                if (key.equals("NAME")) {
+                String value = hashmap.get(key);
+                feature.setProperty(key, value);
+//                }
             }
+            pointStyle.setTitle(feature.getProperty("NAME"));
             feature.setPointStyle(pointStyle);
         }
     }
