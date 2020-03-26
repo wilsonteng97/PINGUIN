@@ -108,7 +108,7 @@ public class User implements Parcelable{
     }
 
     public void setWeight(float weight) {
-        this.height = weight;
+        this.weight = weight;
     }
 
     public boolean isHeightWeightInitialized() {

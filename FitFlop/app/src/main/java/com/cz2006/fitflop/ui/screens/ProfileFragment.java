@@ -118,8 +118,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.VISIBLE);
         saveButton.setVisibility(View.INVISIBLE);
 
-        this.height = Float.parseFloat(editHeight.getText().toString()); //update height
-        this.weight = Float.parseFloat(editWeight.getText().toString()); //update weight
+        this.height = Float.parseFloat(editHeight.getText().toString()); // update height
+        this.weight = Float.parseFloat(editWeight.getText().toString()); // update weight
+
+        User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
+        user.setHeight(this.height);
+        user.setWeight(this.weight);
+        ((UserClient)(getActivity().getApplicationContext())).setUser(user);
     }
 
     //@Override
@@ -155,10 +160,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void updateViews(){
-        editHeight.setText(Float.toString(this.height));
-        editWeight.setText(Float.toString(this.weight));
-        heightView.setText(Float.toString(this.height) + " m");
-        weightView.setText(Float.toString(this.weight) + " kg");
+        User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
+        editHeight.setText(Float.toString(user.getHeight()));
+        editWeight.setText(Float.toString(user.getWeight()));
+        heightView.setText(Float.toString(user.getHeight()) + " m");
+        weightView.setText(Float.toString(user.getWeight()) + " kg");
         calculateBMI();
         BMIView.setText(Float.toString(this.BMI));
     }
