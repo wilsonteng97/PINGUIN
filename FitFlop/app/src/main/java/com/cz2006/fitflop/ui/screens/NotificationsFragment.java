@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.model.Notification;
 import com.cz2006.fitflop.adapter.NotificationsRecyclerViewAdapter;
+import com.cz2006.fitflop.model.Notification;
 import com.cz2006.fitflop.ui.TempCreateNotification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -62,6 +62,8 @@ public class NotificationsFragment extends Fragment implements View.OnClickListe
                                 querySnapshot.getDate("timestamp"), querySnapshot.getString("class_link"), querySnapshot.getBoolean("hasRead"));
 
                         list.add(n);
+                        adapter = new NotificationsRecyclerViewAdapter(getActivity().getApplicationContext(), list);
+                        notificationsRv.setAdapter(adapter);
                     }
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(), "FAILED", Toast.LENGTH_SHORT).show();
@@ -69,9 +71,9 @@ public class NotificationsFragment extends Fragment implements View.OnClickListe
             }
         });
 
-        adapter = new NotificationsRecyclerViewAdapter(getActivity().getApplicationContext(), list);
+
         notificationsRv.setLayoutManager(new LinearLayoutManager(getContext()));
-        notificationsRv.setAdapter(adapter);
+
         notificationsRv.setHasFixedSize(true);
         notificationsRv.setItemAnimator(new DefaultItemAnimator());
 

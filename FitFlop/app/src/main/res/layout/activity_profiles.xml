@@ -76,14 +76,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Height: "
+                    android:text="Height (in cm): "
                     android:textColor="#09428D"
                     android:textSize="20sp" />
                 <TextView
                     android:paddingTop="20dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Weight: "
+                    android:text="Weight (in kg): "
                     android:textColor="#09428D"
                     android:textSize="20sp" />
                 <TextView
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="50dp"
-                android:layout_marginLeft="130dp">
+                android:layout_marginLeft="195dp">
 
                 <TextView
                     android:id="@+id/height_in_cm"
@@ -134,12 +134,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_marginTop="40dp"
-                android:layout_marginLeft="125dp">
+                android:layout_marginLeft="190dp">
 
                 <EditText
                     android:id="@+id/editHeight"
                     android:focusable="true"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number|numberDecimal"
@@ -151,7 +151,7 @@
                     android:id="@+id/editWeight"
                     android:focusable="true"
                     android:paddingTop="10dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number|numberDecimal"

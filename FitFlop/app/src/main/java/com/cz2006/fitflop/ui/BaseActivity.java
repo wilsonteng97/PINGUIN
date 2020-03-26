@@ -51,10 +51,8 @@ import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCAT
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
 public class BaseActivity extends AppCompatActivity {
-//    RadioGroup radioGroup1;
-//    RadioButton screen;
-    private static final String TAG = "BaseActivity";
 
+    private static final String TAG = "BaseActivity";
 
     // DataBase
     private FirebaseFirestore mDb;
@@ -110,7 +108,7 @@ public class BaseActivity extends AppCompatActivity {
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
             public void onClickItem(MeowBottomNavigation.Model item) {
-                Toasty.info(BaseActivity.this, "Clicked item" + item.getId(), Toast.LENGTH_SHORT).show();
+//                Toasty.info(BaseActivity.this, "Clicked item" + item.getId(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -134,9 +132,7 @@ public class BaseActivity extends AppCompatActivity {
                             if (fragment_home==null) {
                                 selected_fragment = new MapsFragment(); fragment_home = selected_fragment; Log.e(TAG, "DIE");
                             }
-                            else {
-                                selected_fragment = fragment_home; Log.e(TAG, "NODIE");
-                            }
+                            else selected_fragment = fragment_home; Log.e(TAG, "NODIE");
                             break;
                         case ID_PROFILE:
                             if (fragment_profile==null) {
@@ -158,39 +154,24 @@ public class BaseActivity extends AppCompatActivity {
         meo.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
             @Override
             public void onReselectItem(MeowBottomNavigation.Model item) {
-                switch (item.getId()) {
-                    case ID_STARRED:
-                        if (fragment_starred==null) {
-                            selected_fragment = new StarredFragment(); fragment_starred = selected_fragment;
-                        }
-                        else selected_fragment = fragment_starred;
-                        break;
-                    case ID_NOTIFICATIONS:
-                        if (fragment_notifications==null) {
-                            selected_fragment = new NotificationsFragment(); fragment_notifications = selected_fragment;
-                        }
-                        else selected_fragment = fragment_notifications;
-                        break;
-                    case ID_HOME:
-                        if (fragment_home==null) {
-                            selected_fragment = new MapsFragment(); fragment_home = selected_fragment;
-                        }
-                        else selected_fragment = fragment_home;
-                        break;
-                    case ID_PROFILE:
-                        if (fragment_profile==null) {
-                            selected_fragment = new ProfileFragment(); fragment_profile = selected_fragment;
-                        }
-                        else selected_fragment = fragment_profile;
-                        break;
-                    case ID_SETTINGS:
-                        if (fragment_settings==null) {
-                            selected_fragment = new SettingsFragment(); fragment_settings = selected_fragment;
-                        }
-                        else selected_fragment = fragment_settings;
-                        break;
-                }
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected_fragment).commit();
+//                switch (item.getId()) {
+//                    case ID_STARRED:
+//                            selected_fragment = new StarredFragment();
+//                        break;
+//                    case ID_NOTIFICATIONS:
+//                            selected_fragment = new NotificationsFragment();
+//                        break;
+//                    case ID_HOME:
+//                            selected_fragment = new MapsFragment();
+//                        break;
+//                    case ID_PROFILE:
+//                            selected_fragment = new ProfileFragment();
+//                        break;
+//                    case ID_SETTINGS:
+//                            selected_fragment = new SettingsFragment();
+//                        break;
+//                }
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected_fragment).commit();
             }
         });
     }

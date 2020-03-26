@@ -2,6 +2,7 @@ package com.cz2006.fitflop.ui.screens;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +23,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.UserClient;
+import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
+import com.cz2006.fitflop.ui.BaseActivity;
+import com.cz2006.fitflop.ui.GeoJsonFeatureInfoActivity;
+import com.cz2006.fitflop.ui.TestView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,13 +57,16 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
+import es.dmoral.toasty.Toasty;
+
 import static com.cz2006.fitflop.R.layout.activity_maps;
-import static com.cz2006.fitflop.logic.MapDistanceLogic.getDistance;
+import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeature;
+import static com.cz2006.fitflop.util.MapUtils.is_feature_near;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationListener {
@@ -72,6 +82,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     private static GoogleMap googleMap;
     private static GeoJsonLayer layer;
     private static GeoJsonLayer near_layer = null;
+    private static GeoJsonFeatureHashMapInfo featureInfoHashMap;
 
     // Widgets/Resources
     private static SeekBar seekBar;
@@ -88,7 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         seekBar = (SeekBar) view.findViewById(R.id.seekBar);
         progressShow = (TextView) view.findViewById(R.id.textView);
         progressShow.setText("<Drag the slider to see facilities near you!>");
-
+        featureInfoHashMap = new GeoJsonFeatureHashMapInfo();
         try {
             layer = new GeoJsonLayer(googleMap, R.raw.gyms_sg_geojson, getActivity().getApplicationContext());
             addColorsToMarkers(layer);
@@ -113,7 +124,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                     near_layer.setOnFeatureClickListener(new GeoJsonLayer.OnFeatureClickListener() {
                         @Override
                         public void onFeatureClick(Feature feature) {
-                            Log.i(TAG, "Feature clicked: " + feature.getProperty("NAME"));
+                            String featureClickedName = feature.getProperty("NAME");
+                            Log.i(TAG, "Feature clicked: " + featureClickedName);
+                            Toasty.info(getActivity(), featureClickedName, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
+                            intent.putExtra("NAME", featureClickedName);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                     });
                 } catch (IOException e) {
@@ -133,7 +150,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                featureInfoHashMap.sortByDistance(current_user_location);
+                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+//                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
         });
 
@@ -207,8 +226,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         Log.i(TAG, "Provider " + provider + " is disabled");
     }
 
-    private HashMap<String, String> parse_html_table(String html_table) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
+    private GeoJsonLayer get_features_near_current_location(GoogleMap googleMap, GeoJsonLayer layer,
+                                                            double metres)
+            throws IOException, JSONException {
+        LatLng user_location = current_user_location;
+        GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
+//        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
+
+        for (GeoJsonFeature feature : layer.getFeatures()) {
+            LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
+            if (is_feature_near(metres, feature_location, user_location)) {
+                new_layer.addFeature(feature);
+            }
+        }
+        return new_layer;
+    }
+
+    private LinkedHashMap<String, String> parse_html_table(String html_table) {
+        LinkedHashMap<String, String> hashMap = new LinkedHashMap<String, String>();
         Document doc = Jsoup.parse(html_table);
         Elements tableElements = doc.select("table");
         Elements tableRowElements = tableElements.select(":not(thead) tr");
@@ -243,7 +278,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                 iterator.remove(); // always use remove() method of iterator
             }
         }
-
         return hashMap;
     }
 
@@ -253,51 +287,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
             pointStyle.setIcon(pointIcon);
             String description = feature.getProperty("Description");
-            HashMap<String, String> hashmap = parse_html_table(description);
-            for (String key : hashmap.keySet()) {
-//                if (key.equals("NAME")) {
-                String value = hashmap.get(key);
-                feature.setProperty(key, value);
-//                }
+            LinkedHashMap<String, String> hashmap = parse_html_table(description);
+            String key = hashmap.get("NAME");
+
+            hashmap.put("LATLNG", feature.getGeometry().getGeometryObject().toString());
+
+            if ((key!=null)&&(hashmap!=null)) {
+                Log.i(TAG, "features are being added.");
+                featureInfoHashMap.add(key, hashmap);
             }
+//            for (String key : hashmap.keySet()) {
+//                String value = hashmap.get(key);
+//                feature.setProperty(key, value);
+//            }
+            feature.setProperty("NAME", key);
             pointStyle.setTitle(feature.getProperty("NAME"));
             feature.setPointStyle(pointStyle);
         }
-    }
-
-    private LatLng getLatLngFromGeoJsonFeature(GeoJsonFeature feature) {
-        String[] coord_str = feature.getGeometry().getGeometryObject().toString().split(",");
-        String lat = coord_str[0].substring(10);
-        String lng = coord_str[1];
-        lng = lng.substring(0, lng.length() - 1);
-        LatLng latlng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-        return latlng;
-    }
-
-    private GeoJsonLayer get_features_near_current_location(GoogleMap googleMap, GeoJsonLayer layer,
-                                                            double metres)
-            throws IOException, JSONException {
-        LatLng user_location = current_user_location;
-        GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
-
-        for (GeoJsonFeature feature : layer.getFeatures()) {
-            LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
-            if (is_feature_near(metres, feature_location, user_location)) {
-                new_layer.addFeature(feature);
-            }
-        }
-        return new_layer;
-    }
-
-    private boolean is_feature_near(double metres, LatLng feature_location, LatLng current_user_location) {
-        boolean isNear = false;
-        double dist;
-
-        dist = getDistance(metres, feature_location, current_user_location);
-        if (dist < metres) {
-            isNear = true;
-        }
-        return isNear;
+        ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
     }
 
     public void searchPlaces(final GoogleMap googleMap){
@@ -324,41 +331,5 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             }
         });
     }
-
-//    LinearLayout dynamicContent, bottomNavBar;
-//    private GoogleMap mMap;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.base_activity);
-//
-//        dynamicContent = (LinearLayout) findViewById(R.id.dynamicContent);
-//        bottomNavBar = (LinearLayout) findViewById(R.id.bottomNavBar);
-//        View wizard = getLayoutInflater().inflate(activity_maps, null);
-//        dynamicContent.addView(wizard);
-//
-//        RadioGroup rg=(RadioGroup)findViewById(R.id.radioGroup1);
-//        RadioButton rb=(RadioButton)findViewById(R.id.Home);
-//
-//        rb.setCompoundDrawablesWithIntrinsicBounds( 0,R.drawable.ic_home_black_selected_24dp, 0,0);
-//        rb.setTextColor(Color.parseColor("#3F51B5"));
-//
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-//    }
-//
-//    public void onMapReady(GoogleMap googleMap) {
-//        // Add a marker in Sydney, Australia,
-//        // and move the map's camera to the same location.
-//        //LatLng sydney = new LatLng(-33.852, 151.211);
-//        //googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//
-//        // Display Singapore :D
-//        LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
-//    }
 }
 

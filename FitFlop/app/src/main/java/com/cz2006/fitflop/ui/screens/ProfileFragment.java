@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
-        // FIXME : Update height and weight into database
+        // FIXME: Update height and weight into database!!
         user.setHeight(height);
         user.setWeight(weight);
 
@@ -100,14 +100,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
 
-        // FIXME: Buggy??? When keyboard is closed the screen is not updated
         showSoftKeyboard(editHeight);
-        /*if (editHeight.isFocused()){
-            showSoftKeyboard(editHeight);
-        }
-        else if (editWeight.isFocused()){
-            showSoftKeyboard(editWeight);
-        }*/
     }
 
     private void saveButtonClicked(){
@@ -145,7 +138,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     private void calculateBMI(){
-        this.BMI = this.weight / (this.height * this.height);
+        this.BMI = this.weight / (this.height/100 * this.height/100);
     }
 
     private void showSoftKeyboard(EditText text){
@@ -155,16 +148,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
         }
     }
-    private void hideSoftKeyboard(){
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-    }
 
     private void updateViews(){
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
         editHeight.setText(Float.toString(user.getHeight()));
         editWeight.setText(Float.toString(user.getWeight()));
-        heightView.setText(Float.toString(user.getHeight()) + " m");
-        weightView.setText(Float.toString(user.getWeight()) + " kg");
+        heightView.setText(Float.toString(user.getHeight()));
+        weightView.setText(Float.toString(user.getWeight()));
         calculateBMI();
         BMIView.setText(Float.toString(this.BMI));
     }
