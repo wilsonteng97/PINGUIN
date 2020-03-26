@@ -1,6 +1,8 @@
 package com.cz2006.fitflop.ui;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.cz2006.fitflop.R;
@@ -17,6 +19,7 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;
     TextView name, description, street, building, block, floor, unit, postal;
+    Button back, star;
     String masterKey;
 
     @Override
@@ -48,6 +51,24 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
         unit = findViewById(R.id.unit);
         postal = findViewById(R.id.postal);
 
+        // Buttons
+        back = findViewById(R.id.backButton);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        star = findViewById(R.id.starButton);
+        star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: if value in hash map is true, change Starred value to false (unstarring)
+                //TODO: else if value in hash map is false, change Starred value to true (star)
+            }
+        });
+
         inputInformationIntoLayout();
 
     }
@@ -62,6 +83,7 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
         unit.setText(UnitNumber);
         postal.setText(PostalCode);
     }
+
 
 }
 
