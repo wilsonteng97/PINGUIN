@@ -37,15 +37,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DESCRIPTION"
-                android:textSize="18sp"
-                android:paddingTop="53dp"
+                android:textSize="15sp"
+                android:paddingTop="40dp"
                 android:layout_marginLeft="35dp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/info_description"
-                android:paddingTop="50dp"
+                android:paddingTop="40dp"
                 android:paddingLeft="5dp"/>
             
             <TextView
@@ -54,13 +54,13 @@
                 android:text="ADDRESS"
                 android:textSize="18sp"
                 android:layout_marginLeft="35dp"
-                android:paddingTop="103dp"/>
+                android:paddingTop="150dp"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/info_location"
-                android:paddingTop="100dp"
+                android:paddingTop="150dp"
                 android:paddingLeft="5dp"/>
 
         </RelativeLayout>
