@@ -5,6 +5,13 @@ import com.google.android.gms.maps.model.LatLng;
 public class MapDistanceLogic {
     private static final double EARTH_RADIUS = 6371000; //meters
 
+    public static double getDistance(LatLng feature_location, LatLng current_user_location) {
+        double dist = 0;
+
+        dist = Math.abs(getAccurateDist(feature_location, current_user_location));
+        return dist;
+    }
+
     public static double getDistance(double metres, LatLng feature_location, LatLng current_user_location) {
         double dist = 0;
         if (metres <= 100) {
