@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.model.Notification;
 import com.cz2006.fitflop.adapter.NotificationsRecyclerViewAdapter;
+import com.cz2006.fitflop.model.Notification;
 import com.cz2006.fitflop.ui.TempCreateNotification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

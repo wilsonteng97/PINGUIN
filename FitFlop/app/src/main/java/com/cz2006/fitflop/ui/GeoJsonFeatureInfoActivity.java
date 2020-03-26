@@ -5,15 +5,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 

@@ -52,7 +52,6 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -133,13 +132,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                featureInfoHashMap.sortByDistance(current_user_location);
-                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
-                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                featureInfoHashMap.sortByDistance(current_user_location);
+                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+//                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
         });
 
@@ -218,7 +218,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             throws IOException, JSONException {
         LatLng user_location = current_user_location;
         GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
-        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
+//        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
 
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
