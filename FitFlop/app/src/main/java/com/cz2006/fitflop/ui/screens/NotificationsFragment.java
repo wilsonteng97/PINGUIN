@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,27 +16,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.model.Notification;
-import com.cz2006.fitflop.ui.NotificationsRecyclerViewAdapter;
+import com.cz2006.fitflop.adapter.NotificationsRecyclerViewAdapter;
 import com.cz2006.fitflop.ui.TempCreateNotification;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.core.OrderBy;
-import com.google.firestore.v1.StructuredQuery;
 
-import org.w3c.dom.Document;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import static com.cz2006.fitflop.R.layout.activity_notifications;
 

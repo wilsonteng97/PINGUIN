@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.ui.StarredAdapter;
-import com.cz2006.fitflop.ui.StarredItem;
+import com.cz2006.fitflop.adapter.StarredAdapter;
+import com.cz2006.fitflop.model.StarredItem;
 
 import java.util.ArrayList;
 

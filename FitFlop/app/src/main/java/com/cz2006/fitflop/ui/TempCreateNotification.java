@@ -9,6 +9,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.adapter.CreateNotificationsAdapter;
 
 public class TempCreateNotification extends AppCompatActivity implements View.OnClickListener {
 
