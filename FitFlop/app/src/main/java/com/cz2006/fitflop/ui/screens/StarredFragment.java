@@ -30,7 +30,7 @@ public class StarredFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<StarredItem> starredItems = new ArrayList<>();
     private Button insert, remove; //FIXME: can delete later
-    User user;
+    private User user;
 
     @Nullable
     @Override
@@ -95,6 +95,7 @@ public class StarredFragment extends Fragment {
             mAdapter.notifyItemInserted(starredItems.size());
         }
         user.setStarredItems(starredItems);
+        ((UserClient) getActivity().getApplicationContext()).setUser(user);
     }
 
     public void removeItem(String name){
@@ -107,6 +108,8 @@ public class StarredFragment extends Fragment {
         }
         mAdapter.notifyItemRemoved(i);
         user.setStarredItems(starredItems);
+        ((UserClient) getActivity().getApplicationContext()).setUser(user);
+
     }
 
     private void buildRecyclerView(View view){

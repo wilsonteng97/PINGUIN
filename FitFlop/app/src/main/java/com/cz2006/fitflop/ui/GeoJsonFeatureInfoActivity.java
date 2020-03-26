@@ -138,10 +138,13 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     private void addStar(String gymName, String postalCode){
         user.addStarredItem(gymName, postalCode);
+        ((UserClient) getApplicationContext()).setUser(user);
+
     }
 
     private void removeStar(String gymName){
         user.removeStarredItem(gymName);
+        ((UserClient) getApplicationContext()).setUser(user);
     }
 
 
