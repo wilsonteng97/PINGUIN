@@ -149,6 +149,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        googleMap.setPadding(0, 0, 0, 100);
         LatLngBounds Singapore = new LatLngBounds(new LatLng(1.27274, 103.602552), new LatLng(1.441715, 104.039828));
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Singapore.getCenter(), 10));
         searchPlaces(googleMap);
