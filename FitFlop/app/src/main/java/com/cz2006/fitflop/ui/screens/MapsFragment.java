@@ -129,7 +129,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                             Toasty.info(getActivity(), featureClickedName, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
                             intent.putExtra("NAME", featureClickedName);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                         }
                     });

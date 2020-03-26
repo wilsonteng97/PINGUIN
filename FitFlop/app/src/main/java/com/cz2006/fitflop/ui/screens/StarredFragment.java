@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.adapter.StarredAdapter;
 import com.cz2006.fitflop.model.StarredItem;
+import com.cz2006.fitflop.model.User;
 
 import java.util.ArrayList;
 
@@ -26,24 +28,34 @@ public class StarredFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private ArrayList<StarredItem> starredItems;
+    private ArrayList<StarredItem> starredItems = new ArrayList<>();
     private Button insert, remove; //FIXME: can delete later
+    User user;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(activity_starred, container, false);
 
+        user = ((UserClient)(getActivity().getApplicationContext())).getUser();
+        if (user==null) {
+            user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
+        }
+        if(user.getStarredItems()==null){
+            starredItems = new ArrayList<StarredItem>();
+            user.setStarredItems(starredItems);
+        }
+
         createList();
         buildRecyclerView(view);
 
-        insert = view.findViewById(R.id.insert); //TODO: Remove buttons
+        /*insert = view.findViewById(R.id.insert); //TODO: Remove buttons
         remove = view.findViewById(R.id.remove);
 
         insert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                insertItem();
+                insertItem("Name4", "Address4");
             }
         });
 
@@ -53,34 +65,36 @@ public class StarredFragment extends Fragment {
                 String name = "Name2"; //TODO: get name of gym from GeoJsonFeatureHashMapInfo method and pass in here
                 removeItem(name);
             }
-        });
+        });*/
 
 
         return view;
     }
 
     public void createList(){
-        starredItems = new ArrayList<>();
-        starredItems.add(new StarredItem("Name1", "Address1"));
-        starredItems.add(new StarredItem("Name2", "Address2"));
-        starredItems.add(new StarredItem("Name3", "Address3"));
+        starredItems = user.getStarredItems();
+        //starredItems.add(new StarredItem("Name1", "Address1"));
+        //starredItems.add(new StarredItem("Name2", "Address2"));
+        //starredItems.add(new StarredItem("Name3", "Address3"));
     }
 
-    public void insertItem(){
-        String nameOfGym = "Name4"; //TODO: pass in name and address here
-        String addressOfGym = "Address4";
-
+    public void insertItem(String nameOfGym, String addressOfGym){
         int j;
         boolean k=false;
-        for (j=0; j<starredItems.size();j++){
-            if(starredItems.get(j).getName() == nameOfGym){  // If item is already inside, don't add it
-                k = true;
+        if(starredItems != null) {
+            for (j = 0; j < starredItems.size(); j++) {
+                if (starredItems.get(j).getName() == nameOfGym) {  // If item is already inside, don't add it
+                    k = true;
+                }
             }
         }
+
         if (k==false){
             starredItems.add(new StarredItem(nameOfGym, addressOfGym));
+            //mAdapter.notifyDataSetChanged();
             mAdapter.notifyItemInserted(starredItems.size());
         }
+        user.setStarredItems(starredItems);
     }
 
     public void removeItem(String name){
@@ -92,10 +106,8 @@ public class StarredFragment extends Fragment {
             }
         }
         mAdapter.notifyItemRemoved(i);
+        user.setStarredItems(starredItems);
     }
-
-
-
 
     private void buildRecyclerView(View view){
         mRecyclerView = view.findViewById(R.id.recycler_view);
@@ -110,9 +122,21 @@ public class StarredFragment extends Fragment {
 
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        createList();
+        buildRecyclerView(getView());
 
+        //update Views
+    }
 
-//    LinearLayout dynamicContent, bottomNavBar;
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    //    LinearLayout dynamicContent, bottomNavBar;
 //
 //    @Override
 //    protected void onCreate(Bundle savedInstanceState) {

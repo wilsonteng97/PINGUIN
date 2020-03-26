@@ -50,6 +50,9 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return this.starredItems.size();
+        if(starredItems != null)
+            return this.starredItems.size();
+        else
+            return 0;
     }
 }

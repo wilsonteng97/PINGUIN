@@ -12,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
+import com.cz2006.fitflop.model.StarredItem;
+import com.cz2006.fitflop.model.User;
+import com.cz2006.fitflop.ui.screens.StarredFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -20,9 +24,10 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;
     TextView name, description, street, building, block, floor, unit, postal;
-    Button back, star;
+    Button back, star, removeStar;
     String masterKey;
     HashMap<String, String> map;
+    User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,6 +38,11 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
         if(extras.containsKey("NAME")) {
             masterKey = intent.getStringExtra("NAME");
+        }
+
+        user = ((UserClient)(getApplicationContext())).getUser();
+        if (user==null) {
+            user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         }
 
         // FIXME: Pass in the data from GeoJson here instead of hardcoding
@@ -59,7 +69,8 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+//                moveTaskToBack(true);
+                GeoJsonFeatureInfoActivity.super.onBackPressed();
             }
         });
 
@@ -67,11 +78,26 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
         star.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: if value in hash map is true, change Starred value to false (unstarring)
-                //TODO: else if value in hash map is false, change Starred value to true (star)
+                addStar(GymName, PostalCode);
+                //FIXME: if remove star button clicked, remove star
             }
         });
 
+        removeStar = findViewById(R.id.removeStar);
+        removeStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeStar(GymName);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+//        moveTaskToBack(true);
+        finish();
     }
 
     public void inputInformationIntoLayout(){
@@ -108,6 +134,14 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
             postal.setText(PostalCode);
         }
 
+    }
+
+    private void addStar(String gymName, String postalCode){
+        user.addStarredItem(gymName, postalCode);
+    }
+
+    private void removeStar(String gymName){
+        user.removeStarredItem(gymName);
     }
 
 

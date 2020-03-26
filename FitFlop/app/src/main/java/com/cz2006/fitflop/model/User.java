@@ -15,7 +15,7 @@ public class User implements Parcelable{
     private float height;
     private float weight;
 
-    private ArrayList<StarredItem> starredItems = null;
+    private ArrayList<StarredItem> starredItems;
 
     private boolean isHeightWeightInitialized;
 
@@ -124,12 +124,35 @@ public class User implements Parcelable{
         this.starredItems = starredItems;
     }
 
-    public void addStarredItem(StarredItem starredItem) {
-        this.starredItems.add(starredItem);
+    public void addStarredItem(String nameOfGym, String addressOfGym) {
+        if(getStarredItems()==null){
+            starredItems = new ArrayList<StarredItem>();
+            setStarredItems(starredItems);
+        }
+
+        int j;
+        boolean k=false;
+        if(starredItems != null) {
+            for (j = 0; j < starredItems.size(); j++) {
+                if (starredItems.get(j).getName().equals(nameOfGym)) {
+                    k = true;
+                }
+            }
+        }
+
+        if (k==false){
+            this.starredItems.add(new StarredItem(nameOfGym, addressOfGym));
+        }
     }
 
-    public void removeStarred(StarredItem starredItem) {
-        this.starredItems.remove(starredItem);
+    public void removeStarredItem(String nameOfGym) {
+        int i;
+        for (i=0;i<starredItems.size();i++){
+            if (starredItems.get(i).getName().equals(nameOfGym)){
+                starredItems.remove(i);
+                break;
+            }
+        }
     }
 
     public void clearStarredItem(StarredItem starredItem) {
