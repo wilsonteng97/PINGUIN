@@ -1,5 +1,6 @@
 package com.cz2006.fitflop.ui.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.adapter.StarredAdapter;
 import com.cz2006.fitflop.model.StarredItem;
 import com.cz2006.fitflop.model.User;
+import com.cz2006.fitflop.ui.GeoJsonFeatureInfoActivity;
 
 import java.util.ArrayList;
 
@@ -26,7 +28,8 @@ import static com.cz2006.fitflop.R.layout.activity_starred;
 public class StarredFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerView.Adapter mAdapter;
+    private StarredAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<StarredItem> starredItems = new ArrayList<>();
     private Button insert, remove; //FIXME: can delete later
@@ -49,25 +52,6 @@ public class StarredFragment extends Fragment {
         createList();
         buildRecyclerView(view);
 
-        /*insert = view.findViewById(R.id.insert); //TODO: Remove buttons
-        remove = view.findViewById(R.id.remove);
-
-        insert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                insertItem("Name4", "Address4");
-            }
-        });
-
-        remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = "Name2"; //TODO: get name of gym from GeoJsonFeatureHashMapInfo method and pass in here
-                removeItem(name);
-            }
-        });*/
-
-
         return view;
     }
 
@@ -78,7 +62,7 @@ public class StarredFragment extends Fragment {
         //starredItems.add(new StarredItem("Name3", "Address3"));
     }
 
-    public void insertItem(String nameOfGym, String addressOfGym){
+    /*public void insertItem(String nameOfGym, String addressOfGym){
         int j;
         boolean k=false;
         if(starredItems != null) {
@@ -96,9 +80,9 @@ public class StarredFragment extends Fragment {
         }
         user.setStarredItems(starredItems);
         ((UserClient) getActivity().getApplicationContext()).setUser(user);
-    }
+    }*/
 
-    public void removeItem(String name){
+    /*public void removeItem(String name){
         int i;
         for (i=0;i<starredItems.size();i++){
             if (starredItems.get(i).getName() == name){
@@ -110,7 +94,7 @@ public class StarredFragment extends Fragment {
         user.setStarredItems(starredItems);
         ((UserClient) getActivity().getApplicationContext()).setUser(user);
 
-    }
+    }*/
 
     private void buildRecyclerView(View view){
         mRecyclerView = view.findViewById(R.id.recycler_view);
@@ -121,9 +105,23 @@ public class StarredFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter.setOnItemClickListener(new StarredAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                String name = starredItems.get(position).getName();
+                openInformationPage(name);
+                //starredItems.get(position);
+            }
+        });
     }
 
-
+    public void openInformationPage(String name){
+        Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
+        intent.putExtra("NAME", name);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     @Override
     public void onResume() {

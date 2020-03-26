@@ -16,16 +16,37 @@ import java.util.ArrayList;
 public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHolder> {
 
     private ArrayList<StarredItem> starredItems;
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mListener = listener;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameView;
         public TextView addressView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             nameView = itemView.findViewById(R.id.starredName);
             addressView = itemView.findViewById(R.id.starredAddress);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(listener != null){
+                        int position = getAdapterPosition();
+                        if(position!=RecyclerView.NO_POSITION) {   //ensure position is valid
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -37,7 +58,7 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.starred_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, mListener);
         return vh;
     }
 
