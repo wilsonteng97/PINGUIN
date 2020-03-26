@@ -2,6 +2,7 @@ package com.cz2006.fitflop.ui.screens;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +25,9 @@ import androidx.fragment.app.Fragment;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
+import com.cz2006.fitflop.ui.BaseActivity;
+import com.cz2006.fitflop.ui.GeoJsonFeatureInfoActivity;
+import com.cz2006.fitflop.ui.TestView;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -52,11 +57,12 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import es.dmoral.toasty.Toasty;
 
 import static com.cz2006.fitflop.R.layout.activity_maps;
 import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeature;
@@ -118,7 +124,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                     near_layer.setOnFeatureClickListener(new GeoJsonLayer.OnFeatureClickListener() {
                         @Override
                         public void onFeatureClick(Feature feature) {
-                            Log.i(TAG, "Feature clicked: " + feature.getProperty("NAME"));
+                            String featureClickedName = feature.getProperty("NAME");
+                            Log.i(TAG, "Feature clicked: " + featureClickedName);
+                            Toasty.info(getActivity(), featureClickedName, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
+                            intent.putExtra("NAME", featureClickedName);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                         }
                     });
                 } catch (IOException e) {
@@ -133,13 +145,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                featureInfoHashMap.sortByDistance(current_user_location);
-                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
-                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
+
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                featureInfoHashMap.sortByDistance(current_user_location);
+                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+//                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
         });
 
@@ -219,7 +232,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             throws IOException, JSONException {
         LatLng user_location = current_user_location;
         GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
-        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
+//        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
 
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);

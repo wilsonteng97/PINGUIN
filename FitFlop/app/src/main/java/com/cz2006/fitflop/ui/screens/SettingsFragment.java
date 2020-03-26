@@ -8,15 +8,32 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.adapter.SettingsAdapter;
 
 import static com.cz2006.fitflop.R.layout.activity_settings;
 
 public class SettingsFragment extends Fragment {
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(activity_settings, container, false);
+        View view = inflater.inflate(activity_settings, container, false);
+
+        mRecyclerView = view.findViewById(R.id.recycler_view_settings);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new SettingsAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
+        return view;
     }
 //    LinearLayout dynamicContent, bottomNavBar;
 //
@@ -37,3 +54,4 @@ public class SettingsFragment extends Fragment {
 //        rb.setTextColor(Color.parseColor("#3F51B5"));
 //    }
 }
+

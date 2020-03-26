@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
-        // FIXME : Update height and weight into database
+        // FIXME: Update height and weight into database!!
         user.setHeight(height);
         user.setWeight(weight);
 
@@ -100,14 +100,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setVisibility(View.INVISIBLE);
         saveButton.setVisibility(View.VISIBLE);
 
-        // FIXME: Buggy??? When keyboard is closed the screen is not updated
         showSoftKeyboard(editHeight);
-        /*if (editHeight.isFocused()){
-            showSoftKeyboard(editHeight);
-        }
-        else if (editWeight.isFocused()){
-            showSoftKeyboard(editWeight);
-        }*/
     }
 
     private void saveButtonClicked(){
@@ -154,9 +147,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
             imm.showSoftInput(text, InputMethodManager.SHOW_FORCED);
         }
-    }
-    private void hideSoftKeyboard(){
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void updateViews(){

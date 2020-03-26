@@ -3,6 +3,8 @@ package com.cz2006.fitflop.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+
 public class User implements Parcelable{
 
     private String email;
@@ -12,6 +14,9 @@ public class User implements Parcelable{
 
     private float height;
     private float weight;
+
+    private ArrayList<StarredItem> starredItems = null;
+
     private boolean isHeightWeightInitialized;
 
     public User(String email, String user_id, String username, String avatar) {
@@ -109,6 +114,26 @@ public class User implements Parcelable{
 
     public void setWeight(float weight) {
         this.weight = weight;
+    }
+
+    public ArrayList<StarredItem> getStarredItems() {
+        return starredItems;
+    }
+
+    public void setStarredItems(ArrayList<StarredItem> starredItems) {
+        this.starredItems = starredItems;
+    }
+
+    public void addStarredItem(StarredItem starredItem) {
+        this.starredItems.add(starredItem);
+    }
+
+    public void removeStarred(StarredItem starredItem) {
+        this.starredItems.remove(starredItem);
+    }
+
+    public void clearStarredItem(StarredItem starredItem) {
+        this.starredItems = new ArrayList<StarredItem>();
     }
 
     public boolean isHeightWeightInitialized() {

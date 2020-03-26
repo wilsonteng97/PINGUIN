@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,24 +26,78 @@ public class StarredFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private ArrayList<StarredItem> starredItems;
+    private Button insert, remove; //FIXME: can delete later
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(activity_starred, container, false);
 
-        ArrayList<StarredItem> starredItems = new ArrayList<>();
+        createList();
+        buildRecyclerView(view);
+
+        insert = view.findViewById(R.id.insert); //TODO: Remove buttons
+        remove = view.findViewById(R.id.remove);
+
+        insert.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                insertItem();
+            }
+        });
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = "Name2"; //TODO: get name of gym from GeoJsonFeatureHashMapInfo method and pass in here
+                removeItem(name);
+            }
+        });
+
+
+        return view;
+    }
+
+    public void createList(){
+        starredItems = new ArrayList<>();
         starredItems.add(new StarredItem("Name1", "Address1"));
         starredItems.add(new StarredItem("Name2", "Address2"));
         starredItems.add(new StarredItem("Name3", "Address3"));
-        starredItems.add(new StarredItem("Name4", "Address4"));
-        starredItems.add(new StarredItem("Name5", "Address5"));
-        starredItems.add(new StarredItem("Name6", "Address6"));
-        starredItems.add(new StarredItem("Name7", "Address7"));
-        starredItems.add(new StarredItem("Name8", "Address8"));
-        starredItems.add(new StarredItem("Name9", "Address9"));
-        starredItems.add(new StarredItem("Name10", "Address10"));
+    }
 
+    public void insertItem(){
+        String nameOfGym = "Name4"; //TODO: pass in name and address here
+        String addressOfGym = "Address4";
+
+        int j;
+        boolean k=false;
+        for (j=0; j<starredItems.size();j++){
+            if(starredItems.get(j).getName() == nameOfGym){  // If item is already inside, don't add it
+                k = true;
+            }
+        }
+        if (k==false){
+            starredItems.add(new StarredItem(nameOfGym, addressOfGym));
+            mAdapter.notifyItemInserted(starredItems.size());
+        }
+    }
+
+    public void removeItem(String name){
+        int i;
+        for (i=0;i<starredItems.size();i++){
+            if (starredItems.get(i).getName() == name){
+                starredItems.remove(i);
+                break;
+            }
+        }
+        mAdapter.notifyItemRemoved(i);
+    }
+
+
+
+
+    private void buildRecyclerView(View view){
         mRecyclerView = view.findViewById(R.id.recycler_view);
         //mRecyclerView.setHasFixedSize(true); //if you know that recycler view in xml layout will not change in size no matter how many items are inside
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -51,11 +106,7 @@ public class StarredFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        return view;
     }
-
-
 
 
 
