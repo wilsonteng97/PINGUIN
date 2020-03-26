@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.cz2006.fitflop.GeoJsonFeatureInfoClient;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
@@ -55,11 +54,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 import static com.cz2006.fitflop.R.layout.activity_maps;
-import static com.cz2006.fitflop.logic.MapDistanceLogic.getDistance;
 import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeature;
 import static com.cz2006.fitflop.util.MapUtils.is_feature_near;
 
@@ -114,7 +113,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                 try {
                     if (near_layer!=null) near_layer.removeLayerFromMap();
                     near_layer = get_features_near_current_location(googleMap, layer, kilometres * 1000);
-                    Log.e(TAG, near_layer.getFeatures().toString());
+//                    Log.i(TAG, near_layer.getFeatures().toString());
                     near_layer.addLayerToMap();
                     near_layer.setOnFeatureClickListener(new GeoJsonLayer.OnFeatureClickListener() {
                         @Override
@@ -134,14 +133,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                featureInfoHashMap.sortByDistance(current_user_location);
+                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                featureInfoHashMap.sortByDistance(current_user_location);
-                ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
-                Log.e(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
         });
 
@@ -220,6 +218,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             throws IOException, JSONException {
         LatLng user_location = current_user_location;
         GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
+        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
 
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
@@ -230,8 +229,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         return new_layer;
     }
 
-    private HashMap<String, String> parse_html_table(String html_table) {
-        HashMap<String, String> hashMap = new HashMap<String, String>();
+    private LinkedHashMap<String, String> parse_html_table(String html_table) {
+        LinkedHashMap<String, String> hashMap = new LinkedHashMap<String, String>();
         Document doc = Jsoup.parse(html_table);
         Elements tableElements = doc.select("table");
         Elements tableRowElements = tableElements.select(":not(thead) tr");
@@ -275,13 +274,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
             pointStyle.setIcon(pointIcon);
             String description = feature.getProperty("Description");
-            HashMap<String, String> hashmap = parse_html_table(description);
+            LinkedHashMap<String, String> hashmap = parse_html_table(description);
             String key = hashmap.get("NAME");
 
             hashmap.put("LATLNG", feature.getGeometry().getGeometryObject().toString());
 
             if ((key!=null)&&(hashmap!=null)) {
-                Log.e(TAG, "FINE");
+                Log.i(TAG, "features are being added.");
                 featureInfoHashMap.add(key, hashmap);
             }
 //            for (String key : hashmap.keySet()) {

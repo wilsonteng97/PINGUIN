@@ -1,17 +1,16 @@
 package com.cz2006.fitflop.model;
 
+import android.util.Log;
+
 import androidx.core.util.Pair;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 import static com.cz2006.fitflop.logic.MapDistanceLogic.getDistance;
@@ -19,30 +18,19 @@ import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeatureString
 
 public class GeoJsonFeatureHashMapInfo {
 
-    private HashMap<String, HashMap<String, String>> featureInfoHashMap;
+    private static final String TAG = "GeoJsonFeatureHashMapInfo";
+    private LinkedHashMap<String, HashMap<String, String>> featureInfoHashMap;
 
     /**
      * Constructor
      */
     public GeoJsonFeatureHashMapInfo() {
-        this.featureInfoHashMap = new HashMap<String, HashMap<String, String>>();
-    }
-
-    public void add(String masterKey, HashMap<String, String> featureInfo) {
-        this.featureInfoHashMap.put(masterKey, featureInfo);
-    }
-
-    public void remove(String masterKey, HashMap featureInfo) {
-        this.featureInfoHashMap.remove(masterKey, featureInfo);
-    }
-
-    public void removeAll() {
-        this.featureInfoHashMap.clear();
+        this.featureInfoHashMap = new LinkedHashMap<String, HashMap<String, String>>();
     }
 
     public void sortByDistance(LatLng currentUserLocation) {
 
-        HashMap<String, HashMap<String, String>> newHashMap = new HashMap<String, HashMap<String, String>>();
+        LinkedHashMap<String, HashMap<String, String>> newHashMap = new LinkedHashMap<String, HashMap<String, String>>();
         ArrayList<Pair<String, Double>> sortedArrayList = new ArrayList<Pair<String, Double>>();
 
         for (String masterKey : this.featureInfoHashMap.keySet()) {
@@ -64,15 +52,28 @@ public class GeoJsonFeatureHashMapInfo {
             masterKey = pair.first;
             newHashMap.put(masterKey, this.featureInfoHashMap.get(masterKey));
         }
+        Log.e(TAG, String.valueOf(newHashMap));
 
         this.featureInfoHashMap = newHashMap;
+    }
+
+    public void add(String masterKey, HashMap<String, String> featureInfo) {
+        this.featureInfoHashMap.put(masterKey, featureInfo);
+    }
+
+    public void remove(String masterKey, HashMap featureInfo) {
+        this.featureInfoHashMap.remove(masterKey, featureInfo);
+    }
+
+    public void removeAll() {
+        this.featureInfoHashMap.clear();
     }
 
     public HashMap<String, HashMap<String, String>> getFeatureInfoHashMap() {
         return featureInfoHashMap;
     }
 
-    public void setFeatureInfoHashMap(HashMap<String, HashMap<String, String>> featureInfoHashMap) {
+    public void setFeatureInfoHashMap(LinkedHashMap<String, HashMap<String, String>> featureInfoHashMap) {
         this.featureInfoHashMap = featureInfoHashMap;
 
     }
