@@ -4,6 +4,11 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.cz2006.fitflop.R;
+import com.cz2006.fitflop.UserClient;
+import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,20 +17,26 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;
     TextView name, description, street, building, block, floor, unit, postal;
+    String masterKey;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // FIXME: Pass in the data from GeoJson here instead of hardcoding
-        GymName = "OMG Yoga";
-        Description = "Operating Hours: Monday & Friday: 10.00am - 6.00pm";
-        StreetName = "Jurong Gateway Road";
-        BuildingName = "-";
-        BlockNumber = "134";
-        FloorNumber = "4";
-        UnitNumber = "309";
-        PostalCode = "600134";
+        GeoJsonFeatureHashMapInfo geojsoninfo = ((UserClient) getApplicationContext()).getGeoJsonFeatureInfo();
+        // TODO: Create a getMasterKey method in GeoJsonFeatureHashMapInfo, where the master key is stored upon double clicking the location
+        // geojsoninfo.getMasterKey();
+        // TODO: then save the information about that particular location as a Hash Map (map) in this class
+
+        /*GymName = map.get("NAME").toString();
+        Description = map.get("DESCRIPTION").toString();
+        StreetName = map.get("ADDRESSSTREETNAME").toString();
+        BuildingName = map.get("ADDRESSBUILDINGNAME").toString();
+        BlockNumber = map.get("ADDRESSBLOCKHOUSENUMBER").toString();
+        FloorNumber = map.get("ADDRESSFLOORNUMBER").toString();
+        UnitNumber = map.get("ADDRESSUNITNUMBER").toString();
+        PostalCode = map.get("ADDRESSPOSTALCODE").toString();*/
 
         // Initialise Views
         name = findViewById(R.id.name);
