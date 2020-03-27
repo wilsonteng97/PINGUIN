@@ -39,7 +39,8 @@ public class UserClient extends Application {
     }
 
     public static GeoPoint getGeoPoint() {
-        if (geoPoint == null) return CENTER_OF_SG;
+//        if (geoPoint == null) return CENTER_OF_SG;
+        if (geoPoint == null) return new GeoPoint(1.3461952,103.6793612);
         return geoPoint;
     }
 
