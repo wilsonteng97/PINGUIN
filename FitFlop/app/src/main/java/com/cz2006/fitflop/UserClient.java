@@ -14,6 +14,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
+
 public class UserClient extends Application {
 
     private static final String TAG = "UserClient";
@@ -22,6 +24,8 @@ public class UserClient extends Application {
     private static User user = null;
     private static GeoPoint geoPoint = null;
     private static GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = null;
+
+    private static ArrayList<String> facilitiesNearYou = null;
 
     public static User getUser() {
         return user;
@@ -64,5 +68,13 @@ public class UserClient extends Application {
 
     public static void setGeoJsonFeatureInfo(GeoJsonFeatureHashMapInfo givenGeoJsonFeatureInfo) {
         geoJsonFeatureInfo = givenGeoJsonFeatureInfo;
+    }
+
+    public static ArrayList<String> getFacilitiesNearYou() {
+        return facilitiesNearYou;
+    }
+
+    public static void setFacilitiesNearYou(ArrayList<String> facilitiesNearYou) {
+        this.facilitiesNearYou = facilitiesNearYou;
     }
 }

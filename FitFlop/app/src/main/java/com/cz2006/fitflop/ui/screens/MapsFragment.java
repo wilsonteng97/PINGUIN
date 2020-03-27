@@ -56,6 +56,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -152,6 +153,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             public void onStopTrackingTouch(SeekBar seekBar) {
                 featureInfoHashMap.sortByDistance(current_user_location);
                 ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+                ArrayList<String> facilitiesNearYou = new ArrayList<String>();
+                for (GeoJsonFeature feature : near_layer.getFeatures()) {
+                    facilitiesNearYou.add(feature.getProperty("NAME"));
+                }
+                ((UserClient)(getActivity().getApplicationContext())).setFacilitiesNearYou(facilitiesNearYou);
 //                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
         });

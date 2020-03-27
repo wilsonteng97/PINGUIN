@@ -26,6 +26,7 @@ import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.User;
 import com.cz2006.fitflop.model.UserLocation;
 import com.cz2006.fitflop.services.GoogleLocationService;
+import com.cz2006.fitflop.ui.screens.FacilitiesNearYouFragment;
 import com.cz2006.fitflop.ui.screens.MapsFragment;
 import com.cz2006.fitflop.ui.screens.NotificationsFragment;
 import com.cz2006.fitflop.ui.screens.ProfileFragment;
@@ -69,16 +70,16 @@ public class BaseActivity extends AppCompatActivity {
     MeowBottomNavigation meo;
     Fragment selected_fragment = null;
     Fragment fragment_starred = null;
-    Fragment fragment_notifications = null;
+    Fragment fragment_facilities = null;
     Fragment fragment_home = null;
     Fragment fragment_profile = null;
     Fragment fragment_settings = null;
 
-    private static final int ID_STARRED         = 1;
-    private static final int ID_NOTIFICATIONS   = 2;
-    private static final int ID_HOME            = 3;
-    private static final int ID_PROFILE         = 4;
-    private static final int ID_SETTINGS        = 5;
+    private static final int ID_STARRED      = 1;
+    private static final int ID_FACILITIES   = 2;
+    private static final int ID_HOME         = 3;
+    private static final int ID_PROFILE      = 4;
+    private static final int ID_SETTINGS     = 5;
 
 
     @Override
@@ -98,12 +99,13 @@ public class BaseActivity extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.ic_profile_black_24dp));
         meo.add(new MeowBottomNavigation.Model(5, R.drawable.ic_settings_black_24dp));
 
-        if(getIntent().hasExtra("Notification_Fragment")){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).commit();
-        }
-        else{
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
-        }
+//        if(getIntent().hasExtra("Notification_Fragment")){
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).commit();
+//        }
+//        else{
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
+//        }
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
             @Override
@@ -122,11 +124,11 @@ public class BaseActivity extends AppCompatActivity {
                             }
                             else selected_fragment = fragment_starred;
                             break;
-                        case ID_NOTIFICATIONS:
-                            if (fragment_notifications==null) {
-                                selected_fragment = new NotificationsFragment(); fragment_notifications = selected_fragment;
+                        case ID_FACILITIES:
+                            if (fragment_facilities==null) {
+                                selected_fragment = new FacilitiesNearYouFragment(); fragment_facilities = selected_fragment;
                             }
-                            else selected_fragment = fragment_notifications;
+                            else selected_fragment = fragment_facilities;
                             break;
                         case ID_HOME:
                             if (fragment_home==null) {
