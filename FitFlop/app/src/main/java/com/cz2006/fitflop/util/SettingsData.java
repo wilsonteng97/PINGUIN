@@ -4,19 +4,19 @@ import com.cz2006.fitflop.R;
 
 public class SettingsData {
 
-    public static String[] title = new String[] {"Facebook","Twitter","Instagram"
+    public static String[] title = new String[] {"Subscription","Help","Info"
     };
 
     public static String[] description = new String[] {
-            "Connect to Facebook",
-            "Connect to Twitter",
-            "Connect to Instagram"
+            "Become a Premium member",
+            "FAQs and Feedback",
+            "About Us"
     };
 
     public static int[] picturePath = new int[] {
-            R.drawable.facebook,
-            R.drawable.twitter,
-            R.drawable.instagram
+            R.drawable.ic_subscriptions_black_24dp,
+            R.drawable.ic_help_outline_black_24dp,
+            R.drawable.ic_info_outline_black_24dp
     };
 
 }
