@@ -28,8 +28,10 @@ public class UserClient extends Application {
     }
 
     public static void setUser(User givenUser) {
-        user = givenUser;
-        saveUserToDB(user);
+        if (givenUser!=null) {
+            user = givenUser;
+            saveUserToDB(user);
+        }
     }
 
     public static GeoPoint getGeoPoint() {

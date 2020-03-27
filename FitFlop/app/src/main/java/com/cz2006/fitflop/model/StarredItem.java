@@ -4,6 +4,9 @@ public class StarredItem {
     private String name;
     private String address;
 
+    public StarredItem(){
+    }
+
     public StarredItem(String name, String address){
         this.name = name;
         this.address = address;
