@@ -79,7 +79,7 @@ public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNea
         String currentItem = this.facilitiesNearYou.get(position);
         holder.nameView.setText(currentItem);
         name = currentItem;
-        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) context).getGeoJsonFeatureInfo();
+        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) context.getApplicationContext()).getGeoJsonFeatureInfo();
         address = geoJsonFeatureInfo.getInfo(currentItem, "ADDRESSPOSTALCODE");
         holder.addressView.setText(address);
     }

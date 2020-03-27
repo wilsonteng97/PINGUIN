@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,7 +25,8 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;
     TextView name, description, street, building, block, floor, unit, postal;
-    Button back, star, removeStar;
+    Button back;
+    ImageButton star, removeStar;
     String masterKey;
     HashMap<String, String> map;
     User user;
@@ -66,30 +68,49 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
         // Buttons
         back = findViewById(R.id.backButton);
+        star = findViewById(R.id.favorite_button_starred);
+        removeStar = findViewById(R.id.favorite_button);
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                moveTaskToBack(true);
                 GeoJsonFeatureInfoActivity.super.onBackPressed();
             }
         });
 
-        star = findViewById(R.id.starButton);
-        star.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addStar(GymName, PostalCode);
-                //FIXME: if remove star button clicked, remove star
-            }
-        });
+        star.setVisibility(View.INVISIBLE);
 
-        removeStar = findViewById(R.id.removeStar);
         removeStar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeStar(GymName);
+                addStar(GymName, PostalCode);
+                star.setVisibility(View.VISIBLE);
+                removeStar.setVisibility(View.INVISIBLE);
             }
         });
+
+        star.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeStar(GymName);
+                removeStar.setVisibility(View.VISIBLE);
+                star.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        // Check if a location is starred or unstarred (to initialise star button view)
+        boolean k = false;
+        for (int i=0; i<user.getStarredItems().size(); i++){
+            if (user.getStarredItems().get(i).getName().equals(GymName)){
+                star.setVisibility(View.VISIBLE);
+                removeStar.setVisibility(View.INVISIBLE);
+                k = true;
+            }
+        }
+        if(k==false){
+            star.setVisibility(View.INVISIBLE);
+            removeStar.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -106,8 +127,10 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
             name.setText(GymName);
         }
         if(map.get("DESCRIPTION")!=null) {
-            Description = map.get("DESCRIPTION");
-            description.setText(Description);
+            if(!map.get("DESCRIPTION").equals("")) {
+                Description = map.get("DESCRIPTION");
+                description.setText(Description);
+            }
         }
         if(map.get("ADDRESSSTREETNAME")!=null){
             StreetName = map.get("ADDRESSSTREETNAME");
@@ -139,7 +162,6 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
     private void addStar(String gymName, String postalCode){
         user.addStarredItem(gymName, postalCode);
         ((UserClient) getApplicationContext()).setUser(user);
-
     }
 
     private void removeStar(String gymName){

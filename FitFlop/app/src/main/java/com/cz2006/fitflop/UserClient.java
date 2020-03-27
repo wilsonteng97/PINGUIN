@@ -74,7 +74,7 @@ public class UserClient extends Application {
         return facilitiesNearYou;
     }
 
-    public static void setFacilitiesNearYou(ArrayList<String> facilitiesNearYou) {
-        this.facilitiesNearYou = facilitiesNearYou;
+    public static void setFacilitiesNearYou(ArrayList<String> givenfacilitiesNearYou) {
+        facilitiesNearYou = givenfacilitiesNearYou;
     }
 }
