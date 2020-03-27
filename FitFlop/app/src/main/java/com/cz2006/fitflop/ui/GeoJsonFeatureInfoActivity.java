@@ -100,6 +100,7 @@ public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
         // Check if a location is starred or unstarred (to initialise star button view)
         boolean k = false;
+        if (user.getStarredItems()==null) return;
         for (int i=0; i<user.getStarredItems().size(); i++){
             if (user.getStarredItems().get(i).getName().equals(GymName)){
                 star.setVisibility(View.VISIBLE);

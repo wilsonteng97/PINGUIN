@@ -58,6 +58,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -151,12 +152,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                featureInfoHashMap.sortByDistance(current_user_location);
+                if (current_user_location!=null) featureInfoHashMap.sortByDistance(current_user_location);
                 ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
+
                 ArrayList<String> facilitiesNearYou = new ArrayList<String>();
+                GeoJsonFeatureHashMapInfo hashMapAll = new GeoJsonFeatureHashMapInfo();
                 for (GeoJsonFeature feature : near_layer.getFeatures()) {
-                    facilitiesNearYou.add(feature.getProperty("NAME"));
+                    String description = feature.getProperty("Description");
+                    HashMap<String, String> hashmap = parse_html_table(description);
+                    String key = hashmap.get("NAME");
+
+                    hashmap.put("LATLNG", feature.getGeometry().getGeometryObject().toString());
+
+                    if ((key!=null)&&(hashmap!=null)) {
+                        Log.i(TAG, "features are being added.");
+                        hashMapAll.add(key, hashmap);
+                    }
+                    feature.setProperty("NAME", key);
                 }
+                hashMapAll.sortByDistance(current_user_location);
+
+                Set<String> sortedFeatures = hashMapAll.getFeatureInfoHashMap().keySet();
+                facilitiesNearYou.addAll(sortedFeatures);
                 ((UserClient)(getActivity().getApplicationContext())).setFacilitiesNearYou(facilitiesNearYou);
 //                Log.i(TAG, ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo().toString());
             }
@@ -242,6 +259,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
+            if (user_location==null) {
+                break;
+            }
             if (is_feature_near(metres, feature_location, user_location)) {
                 new_layer.addFeature(feature);
             }
@@ -249,7 +269,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         return new_layer;
     }
 
-    private LinkedHashMap<String, String> parse_html_table(String html_table) {
+    private HashMap<String, String> parse_html_table(String html_table) {
         LinkedHashMap<String, String> hashMap = new LinkedHashMap<String, String>();
         Document doc = Jsoup.parse(html_table);
         Elements tableElements = doc.select("table");
@@ -294,7 +314,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
             pointStyle.setIcon(pointIcon);
             String description = feature.getProperty("Description");
-            LinkedHashMap<String, String> hashmap = parse_html_table(description);
+            HashMap<String, String> hashmap = parse_html_table(description);
             String key = hashmap.get("NAME");
 
             hashmap.put("LATLNG", feature.getGeometry().getGeometryObject().toString());
@@ -311,6 +331,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             pointStyle.setTitle(feature.getProperty("NAME"));
             feature.setPointStyle(pointStyle);
         }
+//        if (current_user_location!=null) {
+//            featureInfoHashMap.sortByDistance(current_user_location);
+//        }
         ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
     }
 
