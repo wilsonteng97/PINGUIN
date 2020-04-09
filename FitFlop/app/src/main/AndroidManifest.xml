@@ -58,7 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.screens.MapsActivity" />
         <activity android:name=".ui.screens.NotificationsFragment" />
         <activity android:name=".ui.TempCreateNotification" />
         <activity android:name=".ui.screens.ProfileFragment"
@@ -67,14 +66,7 @@
         <activity android:name=".ui.screens.SettingsFragment" />
         <activity android:name=".ui.screens.StarredFragment" />
         <activity android:name=".ui.GeoJsonFeatureInfoActivity" /> <!-- <activity -->
-        <!-- android:name=".MapsActivity" -->
-        <!-- android:label="@string/title_activity_maps"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <!-- <activity android:name=".ui.btm_menu.BottomNavScreen"/> -->
+
         <!-- Add Google Maps API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
