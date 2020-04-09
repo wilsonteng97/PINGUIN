@@ -48,8 +48,6 @@
         -->
         <activity android:name=".ui.LoginView" />
         <activity android:name=".ui.RegisterView" />
-        <activity android:name=".ui.MainView" />
-        <activity android:name=".ui.MapsActivity" />
         <activity android:name=".ui.TestView" />
         <activity android:name=".ui.BaseActivity">
             <intent-filter>
@@ -58,8 +56,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.screens.NotificationsFragment" />
-        <activity android:name=".ui.TempCreateNotification" />
         <activity android:name=".ui.screens.ProfileFragment"
             android:windowSoftInputMode="adjustPan">
         </activity>
