@@ -71,7 +71,9 @@ import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeature;
 import static com.cz2006.fitflop.util.MapUtils.is_feature_near;
 
 /**
- * Homepage screen for the app, which displays the map containing all fitness facility locations and user's current location
+ * MapFragment class is the Homepage screen for the app.
+ * It interfaces with Google Maps API and displays the map containing
+ * the filtered fitness facility locations, as well as the user's current location.
  */
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
@@ -95,6 +97,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     /**
      * Initialise views when fragment is first created
+     * The SeekBar Widget is also created.
      * @param inflater
      * @param container
      * @param savedInstanceState
@@ -121,11 +124,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         }
 
         /**
-         * Set the function of the scroll bar to change the distance from user's current location
+         * Specify Scroll Bar Behaviour
          */
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             double prev_progress = 0;
 
+            /**
+             * When the progress bar is changed, a feature layer containing the facilities
+             * near the user's location is created and added to the map. The TextView widget is
+             * also updated to provide user feedback on the distance the user have selected.
+             * @param seekBar The SeekBar whose progress has changed
+             * @param progress The current progress level
+             *                 (Default value for min is 0 and max is 100)
+             * @param fromUser True if the progress change was initiated by the user.
+             */
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 double kilometres = seekBar.getProgress();
@@ -135,7 +147,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                     near_layer = get_features_near_current_location(googleMap, layer, kilometres * 1000);
 //                    Log.i(TAG, near_layer.getFeatures().toString());
                     near_layer.addLayerToMap();
+
                     near_layer.setOnFeatureClickListener(new GeoJsonLayer.OnFeatureClickListener() {
+                        /**
+                         * When a feature is clicked, an Intent to show the clicked feature's
+                         * information is created and a new Activity is started to surface
+                         * this Intent to the screen.
+                         * @param feature The clicked feature.
+                         */
                         @Override
                         public void onFeatureClick(Feature feature) {
                             String featureClickedName = feature.getProperty("NAME");
@@ -158,7 +177,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             }
 
             /**
-             * Method to specify action when user has started a touch gesture
+             * Method to specify action when user has started a touch gesture.
              * @param seekBar
              */
             @Override
@@ -168,6 +187,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             /**
              * Method to specify action when user has finished the touch gesture
+             * When the user stops movement of the SeekBar, the information of the feature layer
+             * generated in the onProgressChanged listener is stored to the UserClient class
+             * for usage in other classes.
              * @param seekBar
              */
             @Override
@@ -204,7 +226,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     /**
-     * Initialise the map view when map is ready to be used
+     * Initialise the map view when map is ready to be used.
+     * Map is zoomed onto Singapore's location.
      * @param googleMap
      */
     public void onMapReady(GoogleMap googleMap) {
@@ -227,7 +250,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     /**
-     * On resume of the map fragment
+     * On resume of the map fragment, start retrieving user location.
      */
     @Override
     public void onResume() {
@@ -237,8 +260,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         if (ContextCompat.checkSelfPermission(this.getActivity().getApplicationContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity().getApplicationContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
+            // TODO: may need to call ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
             //                                          int[] grantResults)
@@ -251,7 +273,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     /**
-     * On pause of the map fragment
+     * On pause of the map fragment, stop updating user location.
      */
     @Override
     public void onPause() {
@@ -262,7 +284,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     /**
-     * Specify method when the user's location is changed (change the current location marker position)
+     * Specify method when the user's location is changed
+     * (change the current location marker position)
      * @param location
      */
     @Override
@@ -288,12 +311,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         Log.i(TAG, "Provider " + provider + " is disabled");
     }
 
+    /**
+     * Goes through all the available features and filters out features that are not within
+     * x metres of the user's current location.
+     * @param googleMap the Google Maps object.
+     * @param layer feature layer containing all the facility locations.
+     * @param metres features filtered are within this distance from user's current location.
+     * @return new_layer
+     * @throws IOException
+     * @throws JSONException
+     */
     private GeoJsonLayer get_features_near_current_location(GoogleMap googleMap, GeoJsonLayer layer,
                                                             double metres)
             throws IOException, JSONException {
         LatLng user_location = current_user_location;
         GeoJsonLayer new_layer = new GeoJsonLayer(googleMap, R.raw.empty_geojson, getActivity().getApplicationContext());
-//        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) getActivity().getApplicationContext()).getGeoJsonFeatureInfo();
 
         for (GeoJsonFeature feature : layer.getFeatures()) {
             LatLng feature_location = getLatLngFromGeoJsonFeature(feature);
@@ -306,7 +338,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         }
         return new_layer;
     }
-    
+
+    /**
+     * Parses the HTML table information from the GeoJsonFeature object into a HashMap to reduce
+     * retrieval time.
+     * @param html_table
+     * @return
+     */
     private HashMap<String, String> parse_html_table(String html_table) {
         LinkedHashMap<String, String> hashMap = new LinkedHashMap<String, String>();
         Document doc = Jsoup.parse(html_table);
@@ -340,14 +378,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
             if (value == null) {
                 Log.d(TAG, "removing : " + entry);
-                iterator.remove(); // always use remove() method of iterator
+                iterator.remove();
             }
         }
         return hashMap;
     }
 
     /**
-     * to add color/change icon and change properties
+     * Sets the Pin Icon to R.drawable.cdumbbelltwo resource and adds properties to the features
+     * inside the layer before storing the information into UserClient class.
      * @param layer
      */
     private void addColorsToMarkers(GeoJsonLayer layer) {
