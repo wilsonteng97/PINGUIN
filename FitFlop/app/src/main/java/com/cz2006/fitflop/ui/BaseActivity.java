@@ -50,6 +50,9 @@ import static com.cz2006.fitflop.Constants.ERROR_DIALOG_REQUEST;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 import static com.cz2006.fitflop.Constants.PERMISSIONS_REQUEST_ENABLE_GPS;
 
+/**
+ * BaseActivity controls the logic for the switching of fragments based upon the navigation bar.
+ */
 public class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = "BaseActivity";
@@ -81,6 +84,10 @@ public class BaseActivity extends AppCompatActivity {
     private static final int ID_SETTINGS     = 5;
 
 
+    /**
+     * On create, instantiates BottomNavigationBar Widget and fragments.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,12 +105,6 @@ public class BaseActivity extends AppCompatActivity {
         meo.add(new MeowBottomNavigation.Model(4, R.drawable.ic_profile_black_24dp));
         meo.add(new MeowBottomNavigation.Model(5, R.drawable.ic_settings_black_24dp));
 
-//        if(getIntent().hasExtra("Notification_Fragment")){
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new NotificationsFragment()).commit();
-//        }
-//        else{
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
-//        }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapsFragment()).commit();
 
         meo.setOnClickMenuListener(new MeowBottomNavigation.ClickListener() {
@@ -153,30 +154,18 @@ public class BaseActivity extends AppCompatActivity {
         });
 
         meo.setOnReselectListener(new MeowBottomNavigation.ReselectListener() {
+            /**
+             * On reselect of a tab, do nothing
+             * @param item
+             */
             @Override
-            public void onReselectItem(MeowBottomNavigation.Model item) {
-//                switch (item.getId()) {
-//                    case ID_STARRED:
-//                            selected_fragment = new StarredFragment();
-//                        break;
-//                    case ID_NOTIFICATIONS:
-//                            selected_fragment = new NotificationsFragment();
-//                        break;
-//                    case ID_HOME:
-//                            selected_fragment = new MapsFragment();
-//                        break;
-//                    case ID_PROFILE:
-//                            selected_fragment = new ProfileFragment();
-//                        break;
-//                    case ID_SETTINGS:
-//                            selected_fragment = new SettingsFragment();
-//                        break;
-//                }
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selected_fragment).commit();
-            }
+            public void onReselectItem(MeowBottomNavigation.Model item) { }
         });
     }
 
+    /**
+     * On resume of activity, request permissions
+     */
     @Override
     protected void onResume() {
         super.onResume();

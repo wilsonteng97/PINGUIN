@@ -12,6 +12,9 @@ import com.cz2006.fitflop.R;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Starting UI animation
+ */
 public class StartingUI extends AppCompatActivity {
 
     @Override
@@ -27,7 +30,7 @@ public class StartingUI extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                startActivity(new Intent(StartingUI.this, LoginRegView.class));
+                startActivity(new Intent(StartingUI.this, LoginRegActivity.class));
                 finish();
             }
         }, 3000);

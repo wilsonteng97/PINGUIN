@@ -35,7 +35,10 @@ import es.dmoral.toasty.Toasty;
 import static android.text.TextUtils.isEmpty;
 import static com.cz2006.fitflop.util.Check.areStringsEqual;
 
-public class RegisterView extends Fragment implements
+/**
+ * Fragment to allow users to register for an account
+ */
+public class RegisterFragment extends Fragment implements
         View.OnClickListener
 {
     private static final String TAG = "RegisterActivity";
@@ -69,7 +72,7 @@ public class RegisterView extends Fragment implements
         register_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new RegisterView();
+                fragment = new RegisterFragment();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.addToBackStack(null);
@@ -83,7 +86,7 @@ public class RegisterView extends Fragment implements
         login_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new LoginView();
+                fragment = new LoginFragment();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_left_to_right, R.anim.exit_left_to_right, R.anim.enter_right_to_left, R.anim.exit_right_to_left);
@@ -169,7 +172,7 @@ public class RegisterView extends Fragment implements
     private void redirectLoginScreen(){
         Log.d(TAG, "redirectLoginScreen: redirecting to login screen.");
 
-        Intent intent = new Intent(getActivity(), LoginRegView.class);
+        Intent intent = new Intent(getActivity(), LoginRegActivity.class);
         startActivity(intent);
         getActivity().finish();
     }

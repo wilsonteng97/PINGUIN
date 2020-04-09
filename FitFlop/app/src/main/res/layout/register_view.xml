@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_gravity="center"
     android:id="@+id/fragment_login_reg"
-    tools:context="com.cz2006.fitflop.ui.RegisterView">
+    tools:context="com.cz2006.fitflop.ui.RegisterFragment">
 
     <LinearLayout
         android:layout_width="fill_parent"
