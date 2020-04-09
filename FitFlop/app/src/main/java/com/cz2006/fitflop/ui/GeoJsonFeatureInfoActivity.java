@@ -13,13 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
-import com.cz2006.fitflop.model.StarredItem;
 import com.cz2006.fitflop.model.User;
-import com.cz2006.fitflop.ui.screens.StarredFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 

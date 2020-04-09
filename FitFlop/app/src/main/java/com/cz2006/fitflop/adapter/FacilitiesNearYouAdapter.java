@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
 import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
-import com.cz2006.fitflop.model.StarredItem;
 
 import java.util.ArrayList;
 

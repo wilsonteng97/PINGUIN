@@ -28,7 +28,6 @@ import com.cz2006.fitflop.model.UserLocation;
 import com.cz2006.fitflop.services.GoogleLocationService;
 import com.cz2006.fitflop.ui.screens.FacilitiesNearYouFragment;
 import com.cz2006.fitflop.ui.screens.MapsFragment;
-import com.cz2006.fitflop.ui.screens.NotificationsFragment;
 import com.cz2006.fitflop.ui.screens.ProfileFragment;
 import com.cz2006.fitflop.ui.screens.SettingsFragment;
 import com.cz2006.fitflop.ui.screens.StarredFragment;
