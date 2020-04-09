@@ -1,4 +1,4 @@
-package com.cz2006.fitflop.adapter;
+package com.cz2006.fitflop.ui.adapter;
 
 import androidx.annotation.NonNull;
 

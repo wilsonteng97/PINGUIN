@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
 import com.cz2006.fitflop.UserClient;
-import com.cz2006.fitflop.adapter.FacilitiesNearYouAdapter;
+import com.cz2006.fitflop.ui.adapter.FacilitiesNearYouAdapter;
 import com.cz2006.fitflop.ui.GeoJsonFeatureInfoActivity;
 
 import java.util.ArrayList;

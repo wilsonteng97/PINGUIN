@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.adapter.SettingsAdapter;
+import com.cz2006.fitflop.ui.adapter.SettingsAdapter;
 
 import static com.cz2006.fitflop.R.layout.activity_settings;
 
