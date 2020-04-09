@@ -1,5 +1,6 @@
-package com.cz2006.fitflop.ui.adapter;
+package com.cz2006.fitflop.controller;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,20 +10,34 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.model.StarredItem;
+import com.cz2006.fitflop.UserClient;
+import com.cz2006.fitflop.model.GeoJsonFeatureHashMapInfo;
 
 import java.util.ArrayList;
 
 /**
- * Adapter is required for recycler views to handle all the StarredItems contained in the recycler view
+ * Adapter is required for recycler views to handle all the facilities contained in the recycler view
  */
-public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHolder> {
+public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNearYouAdapter.ViewHolder> {
 
-    private ArrayList<StarredItem> starredItems;
+    private ArrayList<String> facilitiesNearYou;
     private OnItemClickListener mListener;
+    private String name;
+    private String address;
+    Context context;
 
     /**
-     * Specify on click action for each starred item
+     * Called by RecyclerView when it starts observing this Adapter
+     * @param recyclerView
+     */
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        context = recyclerView.getContext();
+    }
+
+    /**
+     * Specify on click action for each facility in the list
      */
     public interface OnItemClickListener{
         void onItemClick(int position);
@@ -64,11 +79,11 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
     }
 
     /**
-     * Constructor to initialise the StarredAdapter by passing in the ArrayList of starred items
-     * @param starredItems
+     * Constructor to initialise the adapter by passing in the ArrayList of facilities
+     * @param facilitiesNearYou
      */
-    public StarredAdapter(ArrayList<StarredItem> starredItems){
-        this.starredItems = starredItems;
+    public FacilitiesNearYouAdapter(ArrayList<String> facilitiesNearYou){
+        this.facilitiesNearYou = facilitiesNearYou;
     }
 
     /**
@@ -92,19 +107,22 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
      */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        StarredItem currentItem = this.starredItems.get(position);
-        holder.nameView.setText(currentItem.getName());
-        holder.addressView.setText(currentItem.getAddress());
+        String currentItem = this.facilitiesNearYou.get(position);
+        holder.nameView.setText(currentItem);
+        name = currentItem;
+        GeoJsonFeatureHashMapInfo geoJsonFeatureInfo = ((UserClient) context.getApplicationContext()).getGeoJsonFeatureInfo();
+        address = geoJsonFeatureInfo.getInfo(currentItem, "ADDRESSPOSTALCODE");
+        holder.addressView.setText(address);
     }
 
     /**
-     * Return number of starred items
+     * Return number of facilities in the ArrayList
      * @return
      */
     @Override
     public int getItemCount() {
-        if(starredItems != null)
-            return this.starredItems.size();
+        if(facilitiesNearYou != null)
+            return this.facilitiesNearYou.size();
         else
             return 0;
     }

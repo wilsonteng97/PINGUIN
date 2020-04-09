@@ -1,4 +1,4 @@
-package com.cz2006.fitflop.ui.adapter;
+package com.cz2006.fitflop.controller;
 
 import android.content.Context;
 import android.view.LayoutInflater;
