@@ -1,5 +1,8 @@
 package com.cz2006.fitflop.util;
 
+/**
+ * The Check class contains methods that are commonly used for variable checks.
+ */
 public class Check {
     /**
      * Return true if the @param is null
