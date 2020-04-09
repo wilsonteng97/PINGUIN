@@ -26,14 +26,23 @@ import java.util.ArrayList;
 
 import static com.cz2006.fitflop.R.layout.activity_starred;
 
+/**
+ * This class displays the facilities near the user, sorted in ascending order by distance
+ */
 public class FacilitiesNearYouFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    //private RecyclerView.Adapter mAdapter;
     private FacilitiesNearYouAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private ArrayList<String> facilitiesNearYou = new ArrayList<>();
     private Button insert, remove; //FIXME: can delete later
 
+    /**
+     * Initialise views when fragment is first created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,7 +52,6 @@ public class FacilitiesNearYouFragment extends Fragment {
 
         if(facilitiesNearYou==null){
             facilitiesNearYou = new ArrayList<String>();
-//            ((UserClient)getActivity().getApplicationContext()).setFacilitiesNearYou(facilitiesNearYou);
         }
 
 
@@ -52,13 +60,19 @@ public class FacilitiesNearYouFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initialise the ArrayList of facilities near the user (by retrieving the information from the UserClient class)
+     */
     public void createList() {
         facilitiesNearYou = ((UserClient)(getActivity().getApplicationContext())).getFacilitiesNearYou();
     }
 
+    /**
+     * Build the recycler view (for the scrollable cardView layout)
+     * @param view
+     */
     private void buildRecyclerView(View view){
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        //mRecyclerView.setHasFixedSize(true); //if you know that recycler view in xml layout will not change in size no matter how many items are inside
         mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new FacilitiesNearYouAdapter(facilitiesNearYou);
 
@@ -66,16 +80,22 @@ public class FacilitiesNearYouFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        /**
+         * Enable clicking of each cardView item to open the information page of that fitness facility
+         */
         mAdapter.setOnItemClickListener(new FacilitiesNearYouAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 String name = facilitiesNearYou.get(position);
                 openInformationPage(name);
-                //starredItems.get(position);
             }
         });
     }
 
+    /**
+     * Method to open the information page activity
+     * @param name
+     */
     public void openInformationPage(String name){
         Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
         intent.putExtra("NAME", name);
@@ -83,6 +103,9 @@ public class FacilitiesNearYouFragment extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * On resume of the fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -90,6 +113,9 @@ public class FacilitiesNearYouFragment extends Fragment {
         buildRecyclerView(getView());
     }
 
+    /**
+     * On pause of the fragment
+     */
     @Override
     public void onPause() {
         super.onPause();

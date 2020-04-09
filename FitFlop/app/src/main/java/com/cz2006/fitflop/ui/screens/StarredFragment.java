@@ -25,6 +25,9 @@ import java.util.ArrayList;
 
 import static com.cz2006.fitflop.R.layout.activity_starred;
 
+/**
+ * Starred page to display the fitness facilities starred by the user
+ */
 public class StarredFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
@@ -35,6 +38,13 @@ public class StarredFragment extends Fragment {
     private Button insert, remove; //FIXME: can delete later
     private User user;
 
+    /**
+     * Initialise views when fragment is first created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,50 +65,19 @@ public class StarredFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Initialise the ArrayList of starred items (retrieve the list from the user database)
+     */
     public void createList(){
         starredItems = user.getStarredItems();
-        //starredItems.add(new StarredItem("Name1", "Address1"));
-        //starredItems.add(new StarredItem("Name2", "Address2"));
-        //starredItems.add(new StarredItem("Name3", "Address3"));
     }
 
-    /*public void insertItem(String nameOfGym, String addressOfGym){
-        int j;
-        boolean k=false;
-        if(starredItems != null) {
-            for (j = 0; j < starredItems.size(); j++) {
-                if (starredItems.get(j).getName() == nameOfGym) {  // If item is already inside, don't add it
-                    k = true;
-                }
-            }
-        }
-
-        if (k==false){
-            starredItems.add(new StarredItem(nameOfGym, addressOfGym));
-            //mAdapter.notifyDataSetChanged();
-            mAdapter.notifyItemInserted(starredItems.size());
-        }
-        user.setStarredItems(starredItems);
-        ((UserClient) getActivity().getApplicationContext()).setUser(user);
-    }*/
-
-    /*public void removeItem(String name){
-        int i;
-        for (i=0;i<starredItems.size();i++){
-            if (starredItems.get(i).getName() == name){
-                starredItems.remove(i);
-                break;
-            }
-        }
-        mAdapter.notifyItemRemoved(i);
-        user.setStarredItems(starredItems);
-        ((UserClient) getActivity().getApplicationContext()).setUser(user);
-
-    }*/
-
+    /**
+     * Build the recycler view to contain the scrollable cardViews which display the starred locations
+     * @param view
+     */
     private void buildRecyclerView(View view){
         mRecyclerView = view.findViewById(R.id.recycler_view);
-        //mRecyclerView.setHasFixedSize(true); //if you know that recycler view in xml layout will not change in size no matter how many items are inside
         mLayoutManager = new LinearLayoutManager(getActivity());
         mAdapter = new StarredAdapter(starredItems);
 
@@ -106,16 +85,22 @@ public class StarredFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        /**
+         * Enable clicking of the cardView to open the information page for that fitness facility
+         */
         mAdapter.setOnItemClickListener(new StarredAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 String name = starredItems.get(position).getName();
                 openInformationPage(name);
-                //starredItems.get(position);
             }
         });
     }
 
+    /**
+     * Method to open the information page activity
+     * @param name
+     */
     public void openInformationPage(String name){
         Intent intent = new Intent(getActivity(), GeoJsonFeatureInfoActivity.class);
         intent.putExtra("NAME", name);
@@ -123,6 +108,9 @@ public class StarredFragment extends Fragment {
         startActivity(intent);
     }
 
+    /**
+     * On resume of the fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -132,27 +120,12 @@ public class StarredFragment extends Fragment {
         //update Views
     }
 
+    /**
+     * On pause of the fragment
+     */
     @Override
     public void onPause() {
         super.onPause();
     }
 
-    //    LinearLayout dynamicContent, bottomNavBar;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.base_activity);
-//
-//        dynamicContent = (LinearLayout) findViewById(R.id.dynamicContent);
-//        bottomNavBar = (LinearLayout) findViewById(R.id.bottomNavBar);
-//        View wizard = getLayoutInflater().inflate(activity_starred, null);
-//        dynamicContent.addView(wizard);
-//
-//        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
-//        RadioButton rb = (RadioButton) findViewById(R.id.Starred);
-//
-//        rb.setCompoundDrawablesWithIntrinsicBounds( 0,R.drawable.ic_star_black_selected_24dp, 0,0);
-//        rb.setTextColor(Color.parseColor("#3F51B5"));
-//    }
 }

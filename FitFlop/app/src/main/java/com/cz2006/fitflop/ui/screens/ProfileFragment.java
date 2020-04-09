@@ -26,6 +26,9 @@ import java.util.Objects;
 
 import static com.cz2006.fitflop.R.layout.activity_profiles;
 
+/**
+ * Initialises the contents in the Profile Fragment (for the profile screen)
+ */
 public class ProfileFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "Profile Activity";
 
@@ -36,26 +39,38 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private Button logoutButton;
     private Button editButton, saveButton;
 
+    /**
+     * Method to initialise the view when fragment is first created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(activity_profiles, container, false);
 
-        // FIXME -> For testing purposes only! (Need to get user data from the current user)
+        /**
+         * Checks for the current user information
+         */
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
         if (user==null) {
             user = new User("TestEmail@mail.com", "3mTjQ1eGZEfLHrqNqka2cLk3Qui2", "TestEmail", "test_avatar", 1.75f, 65);
         }
-        //Log.d(TAG, "insertNewMessage: retrieved user client: " + user.toString());
 
-        // Retrieve User Info from Database, Initialise Variables
+        /**
+         * Retrieves user information from the User class and initialise variables
+         */
         name = user.getUsername();
         email = user.getEmail();
         height = user.getHeight();
         weight = user.getWeight();
         calculateBMI();
 
-        // Initialise Views
+        /**
+         * Initialise views for the layout xml file
+         */
         nameView = (TextView)view.findViewById(R.id.userName);
         emailView = (TextView)view.findViewById(R.id.emailAddress);
         BMIView = (TextView)view.findViewById(R.id.calculated_BMI);
@@ -64,12 +79,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editHeight = (EditText) view.findViewById(R.id.editHeight);
         editWeight = (EditText) view.findViewById(R.id.editWeight);
 
-        // Set Data (Display on screen and update User info)
+        /**
+         * Set data to display in each of the views
+          */
         nameView.setText(name);
         emailView.setText(email);
         updateViews();
 
-        // Initialise Buttons
+        /**
+         * Initialise buttons
+         */
         logoutButton = (Button) view.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(this);
         editButton = (Button) view.findViewById(R.id.edit);
@@ -77,13 +96,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         editButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
 
-        // FIXME: Update height and weight into database!!
         user.setHeight(height);
         user.setWeight(weight);
 
         return view;
     }
 
+    /**
+     * Method to log out the current user
+     */
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), LoginRegView.class);
@@ -92,6 +113,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         getActivity().finish();
     }
 
+    /**
+     * When edit button is clicked, show the editText views and hide the textViews to enable editing of height and weight
+     */
     private void editButtonClicked(){
         editHeight.setVisibility(View.VISIBLE);
         editWeight.setVisibility(View.VISIBLE);
@@ -103,6 +127,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         showSoftKeyboard(editHeight);
     }
 
+    /**
+     * Store the updated user height and weight when the save button is clicked
+     */
     private void saveButtonClicked(){
         editHeight.setVisibility(View.INVISIBLE);
         editWeight.setVisibility(View.INVISIBLE);
@@ -120,6 +147,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         ((UserClient)(getActivity().getApplicationContext())).setUser(user);
     }
 
+    /**
+     * Switch function to control button click activity
+     * @param v
+     */
     //@Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -137,10 +168,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Function to calculate BMI
+     */
     private void calculateBMI(){
         this.BMI = this.weight / (this.height/100 * this.height/100);
     }
 
+    /**
+     * Function to display the keyboard to edit text
+     * @param text
+     */
     private void showSoftKeyboard(EditText text){
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -149,6 +187,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    /**
+     * Update the editText and viewText views whenever height and weight is edited, to display the updated information on the screen
+     */
     private void updateViews(){
         User user = ((UserClient)(getActivity().getApplicationContext())).getUser();
         editHeight.setText(Float.toString(user.getHeight()));
@@ -159,22 +200,4 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         BMIView.setText(Float.toString(this.BMI));
     }
 
-//    LinearLayout dynamicContent, bottomNavBar;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.base_activity);
-//
-//        dynamicContent = (LinearLayout) findViewById(R.id.dynamicContent);
-//        bottomNavBar = (LinearLayout) findViewById(R.id.bottomNavBar);
-//        View wizard = getLayoutInflater().inflate(activity_profiles, null);
-//        dynamicContent.addView(wizard);
-//
-//        RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
-//        RadioButton rb = (RadioButton) findViewById(R.id.Profile);
-//
-//        rb.setCompoundDrawablesWithIntrinsicBounds( 0,R.drawable.ic_profile_black_selected_24dp, 0,0);
-//        rb.setTextColor(Color.parseColor("#3F51B5"));
-//    }
 }

@@ -70,7 +70,9 @@ import static com.cz2006.fitflop.R.layout.activity_maps;
 import static com.cz2006.fitflop.util.MapUtils.getLatLngFromGeoJsonFeature;
 import static com.cz2006.fitflop.util.MapUtils.is_feature_near;
 
-
+/**
+ * Homepage screen for the app, which displays the map containing all fitness facility locations and user's current location
+ */
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationListener {
 
     private static final String TAG = "MapsFragment";
@@ -91,6 +93,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     private static TextView progressShow;
     private static BitmapDescriptor pointIcon;
 
+    /**
+     * Initialise views when fragment is first created
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -111,6 +120,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             Log.e(TAG, "" + e.toString());
         }
 
+        /**
+         * Set the function of the scroll bar to change the distance from user's current location
+         */
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             double prev_progress = 0;
 
@@ -145,11 +157,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                 prev_progress = kilometres;
             }
 
+            /**
+             * Method to specify action when user has started a touch gesture
+             * @param seekBar
+             */
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
 
             }
 
+            /**
+             * Method to specify action when user has finished the touch gesture
+             * @param seekBar
+             */
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (current_user_location!=null) featureInfoHashMap.sortByDistance(current_user_location);
@@ -183,6 +203,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         return view;
     }
 
+    /**
+     * Initialise the map view when map is ready to be used
+     * @param googleMap
+     */
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
         googleMap.setPadding(0, 0, 0, 100);
@@ -192,12 +216,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     }
 
+    /**
+     * Call location service when fragment is first attached to host activity
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mLocationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
     }
 
+    /**
+     * On resume of the map fragment
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -219,6 +250,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
+    /**
+     * On pause of the map fragment
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -227,6 +261,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         mLocationManager.removeUpdates(this);
     }
 
+    /**
+     * Specify method when the user's location is changed (change the current location marker position)
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         Log.i(TAG, String.valueOf(location.getLatitude()) + " | " + String.valueOf(location.getLongitude()));
@@ -268,7 +306,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         }
         return new_layer;
     }
-
+    
     private HashMap<String, String> parse_html_table(String html_table) {
         LinkedHashMap<String, String> hashMap = new LinkedHashMap<String, String>();
         Document doc = Jsoup.parse(html_table);
@@ -308,7 +346,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         return hashMap;
     }
 
-    //to add color/change icon and change properties
+    /**
+     * to add color/change icon and change properties
+     * @param layer
+     */
     private void addColorsToMarkers(GeoJsonLayer layer) {
         for (GeoJsonFeature feature : layer.getFeatures()) {
             GeoJsonPointStyle pointStyle = new GeoJsonPointStyle();
@@ -337,6 +378,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         ((UserClient) getActivity().getApplicationContext()).setGeoJsonFeatureInfo(featureInfoHashMap);
     }
 
+    /**
+     * Google places API to implement search bar
+     * @param googleMap
+     */
     public void searchPlaces(final GoogleMap googleMap){
         if (!Places.isInitialized()){
             Places.initialize(getActivity().getApplicationContext(), apiPlacesKey);
