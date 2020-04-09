@@ -13,19 +13,32 @@ import com.cz2006.fitflop.model.StarredItem;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter is required for recycler views to handle all the StarredItems contained in the recycler view
+ */
 public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHolder> {
 
     private ArrayList<StarredItem> starredItems;
     private OnItemClickListener mListener;
 
+    /**
+     * Specify on click action for each starred item
+     */
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
 
+    /**
+     * Register a callback to be invoked when an item in this AdapterView has been clicked.
+     * @param listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener){
         mListener = listener;
     }
 
+    /**
+     * Create ViewHolder
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameView;
@@ -50,10 +63,20 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
         }
     }
 
+    /**
+     * Constructor to initialise the StarredAdapter by passing in the ArrayList of starred items
+     * @param starredItems
+     */
     public StarredAdapter(ArrayList<StarredItem> starredItems){
         this.starredItems = starredItems;
     }
 
+    /**
+     * Initialise the ViewHolder once it has been created
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,6 +85,11 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
         return vh;
     }
 
+    /**
+     * Helps to display the data at the specific position
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         StarredItem currentItem = this.starredItems.get(position);
@@ -69,6 +97,10 @@ public class StarredAdapter extends RecyclerView.Adapter<StarredAdapter.ViewHold
         holder.addressView.setText(currentItem.getAddress());
     }
 
+    /**
+     * Return number of starred items
+     * @return
+     */
     @Override
     public int getItemCount() {
         if(starredItems != null)

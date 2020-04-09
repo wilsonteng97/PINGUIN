@@ -16,6 +16,9 @@ import com.cz2006.fitflop.model.StarredItem;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter is required for recycler views to handle all the facilities contained in the recycler view
+ */
 public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNearYouAdapter.ViewHolder> {
 
     private ArrayList<String> facilitiesNearYou;
@@ -24,20 +27,34 @@ public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNea
     private String address;
     Context context;
 
+    /**
+     * Called by RecyclerView when it starts observing this Adapter
+     * @param recyclerView
+     */
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         context = recyclerView.getContext();
     }
 
+    /**
+     * Specify on click action for each facility in the list
+     */
     public interface OnItemClickListener{
         void onItemClick(int position);
     }
 
+    /**
+     * Register a callback to be invoked when an item in this AdapterView has been clicked.
+     * @param listener
+     */
     public void setOnItemClickListener(OnItemClickListener listener){
         mListener = listener;
     }
 
+    /**
+     * Create ViewHolder
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView nameView;
@@ -62,10 +79,20 @@ public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNea
         }
     }
 
+    /**
+     * Constructor to initialise the adapter by passing in the ArrayList of facilities
+     * @param facilitiesNearYou
+     */
     public FacilitiesNearYouAdapter(ArrayList<String> facilitiesNearYou){
         this.facilitiesNearYou = facilitiesNearYou;
     }
 
+    /**
+     * Initialise the ViewHolder once it has been created
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -74,6 +101,11 @@ public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNea
         return vh;
     }
 
+    /**
+     * Helps to display the data at the specific position
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String currentItem = this.facilitiesNearYou.get(position);
@@ -84,6 +116,10 @@ public class FacilitiesNearYouAdapter extends RecyclerView.Adapter<FacilitiesNea
         holder.addressView.setText(address);
     }
 
+    /**
+     * Return number of facilities in the ArrayList
+     * @return
+     */
     @Override
     public int getItemCount() {
         if(facilitiesNearYou != null)
