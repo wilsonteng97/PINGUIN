@@ -266,6 +266,11 @@ public class User implements Parcelable{
         this.isHeightWeightInitialized = isHeightWeightInitialized;
     }
 
+    /**
+     * Returns information of the User in String format.
+     * For debugging purposes.
+     * @return user information
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
@@ -285,6 +290,11 @@ public class User implements Parcelable{
         return 0;
     }
 
+    /**
+     * Convert User object into a Parcel object to enable saving to DataBase.
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(email);

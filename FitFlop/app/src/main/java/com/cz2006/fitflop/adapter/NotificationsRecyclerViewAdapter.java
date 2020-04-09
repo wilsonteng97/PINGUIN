@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cz2006.fitflop.R;
-import com.cz2006.fitflop.model.Notification;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

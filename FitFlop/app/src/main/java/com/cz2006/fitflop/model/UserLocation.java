@@ -116,6 +116,11 @@ public class UserLocation implements Parcelable {
         return 0;
     }
 
+    /**
+     * Convert UserLocation object into a Parcel object to enable saving to DataBase.
+     * @param dest
+     * @param flags
+     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(user, flags);

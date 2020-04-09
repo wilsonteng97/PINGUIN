@@ -2,7 +2,6 @@ package com.cz2006.fitflop.adapter;
 
 import androidx.annotation.NonNull;
 
-import com.cz2006.fitflop.model.Notification;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
