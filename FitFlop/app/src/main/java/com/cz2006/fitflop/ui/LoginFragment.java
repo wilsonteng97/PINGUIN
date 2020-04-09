@@ -41,8 +41,10 @@ import es.dmoral.toasty.Toasty;
 
 import static android.text.TextUtils.isEmpty;
 
-
-public class LoginView extends Fragment implements
+/**
+ * Fragment for Login Screen
+ */
+public class LoginFragment extends Fragment implements
         View.OnClickListener
 {
 
@@ -78,7 +80,7 @@ public class LoginView extends Fragment implements
         register_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new RegisterView();
+                fragment = new RegisterFragment();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.enter_right_to_left, R.anim.exit_right_to_left, R.anim.enter_left_to_right, R.anim.exit_left_to_right);
@@ -92,7 +94,7 @@ public class LoginView extends Fragment implements
         login_link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new LoginView();
+                fragment = new LoginFragment();
                 fragmentManager = getFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.addToBackStack(null);

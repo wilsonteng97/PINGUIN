@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.cz2006.fitflop.R;
 
-public class LoginRegView extends AppCompatActivity {
+/**
+ * View to contain and interchange between the Login and Register fragments
+ */
+public class LoginRegActivity extends AppCompatActivity {
 
     Fragment fragment;
     FragmentManager fragmentManager;
@@ -26,7 +29,7 @@ public class LoginRegView extends AppCompatActivity {
     }
 
     public void addFragment(){
-        LoginView fragment = new LoginView();
+        LoginFragment fragment = new LoginFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.fragment_login_reg,fragment);

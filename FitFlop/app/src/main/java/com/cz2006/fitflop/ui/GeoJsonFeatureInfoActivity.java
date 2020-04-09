@@ -17,6 +17,9 @@ import com.cz2006.fitflop.model.User;
 
 import java.util.HashMap;
 
+/**
+ * GeoJsonFeatureInfoActivity displays the info of the input feature to the user.
+ */
 public class GeoJsonFeatureInfoActivity extends AppCompatActivity {
 
     String GymName, Description, StreetName, BuildingName, BlockNumber, FloorNumber, UnitNumber, PostalCode;

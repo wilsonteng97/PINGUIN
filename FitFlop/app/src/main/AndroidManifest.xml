@@ -37,7 +37,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.LoginRegView" />
+        <activity android:name=".ui.LoginRegActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -46,9 +46,8 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-        <activity android:name=".ui.LoginView" />
-        <activity android:name=".ui.RegisterView" />
-        <activity android:name=".ui.TestView" />
+        <activity android:name=".ui.LoginFragment" />
+        <activity android:name=".ui.RegisterFragment" />
         <activity android:name=".ui.BaseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
