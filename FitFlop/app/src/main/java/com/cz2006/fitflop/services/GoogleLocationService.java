@@ -35,6 +35,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 
+/**
+ * A service to update user location to the DataBase after checking for permissions.
+ */
 public class GoogleLocationService extends Service {
 
     private static final String TAG = "GoogleLocationServices";
@@ -53,6 +56,9 @@ public class GoogleLocationService extends Service {
         return null;
     }
 
+    /**
+     * When Service is created
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -75,6 +81,13 @@ public class GoogleLocationService extends Service {
         }
     }
 
+    /**
+     * When service is started, getLocation() method is called to retrieve user location.
+     * @param intent
+     * @param flags
+     * @param startId
+     * @return
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand: called.");
@@ -82,6 +95,9 @@ public class GoogleLocationService extends Service {
         return START_NOT_STICKY;
     }
 
+    /**
+     * Gets User location and updates location to Database.
+     */
     private void getLocation() {
 
         // ---------------------------------- LocationRequest ------------------------------------
@@ -120,6 +136,10 @@ public class GoogleLocationService extends Service {
                 Looper.myLooper()); // Looper.myLooper tells this to repeat forever until thread is destroyed
     }
 
+    /**
+     * Saves User location to Database.
+     * @param userLocation
+     */
     private void saveUserLocation(final UserLocation userLocation){
         try{
             DocumentReference locationRef = FirebaseFirestore.getInstance()
