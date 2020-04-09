@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+/**
+ * Class to store all the user information for the current user
+ */
 public class User implements Parcelable{
 
     private String email;
@@ -19,6 +22,13 @@ public class User implements Parcelable{
 
     private boolean isHeightWeightInitialized;
 
+    /**
+     * Constructor
+     * @param email
+     * @param user_id
+     * @param username
+     * @param avatar
+     */
     public User(String email, String user_id, String username, String avatar) {
         this.email = email;
         this.user_id = user_id;
@@ -30,6 +40,15 @@ public class User implements Parcelable{
         this.isHeightWeightInitialized = false;
     }
 
+    /**
+     * Constructor
+     * @param email
+     * @param user_id
+     * @param username
+     * @param avatar
+     * @param height
+     * @param weight
+     */
     public User(String email, String user_id, String username, String avatar, float height, float weight) {
         this.email = email;
         this.user_id = user_id;
@@ -41,6 +60,9 @@ public class User implements Parcelable{
         this.isHeightWeightInitialized = true;
     }
 
+    /**
+     * Constructor
+     */
     public User() {
 
     }
@@ -64,10 +86,18 @@ public class User implements Parcelable{
         }
     };
 
+    /**
+     * Getter method for avatar
+     * @return
+     */
     public String getAvatar() {
         return avatar;
     }
 
+    /**
+     * Setter method for avatar
+     * @param avatar
+     */
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
@@ -76,54 +106,107 @@ public class User implements Parcelable{
         return CREATOR;
     }
 
+    /**
+     * Getter method for email
+     * @return
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Setter method for email
+     * @param email
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * Getter method for user id
+     * @return
+     */
     public String getUser_id() {
         return user_id;
     }
 
+    /**
+     * Setter method for user id
+     * @param user_id
+     */
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
+    /**
+     * Getter method for username
+     * @return
+     */
     public String getUsername() {
         return username;
     }
 
+    /**
+     * Setter method for username
+     * @param username
+     */
     public void setUsername(String username) {
         this.username = username;
     }
 
+    /**
+     * Getter method for height
+     * @return
+     */
     public float getHeight() {
         return height;
     }
 
+    /**
+     * Setter method for height
+     * @param height
+     */
     public void setHeight(float height) {
         this.height = height;
     }
 
+    /**
+     * Getter method for weight
+     * @return
+     */
     public float getWeight() {
         return weight;
     }
 
+    /**
+     * Setter method for weight
+     * @param weight
+     */
     public void setWeight(float weight) {
         this.weight = weight;
     }
 
+    /**
+     * Getter method for starred items
+     * @return
+     */
     public ArrayList<StarredItem> getStarredItems() {
         return starredItems;
     }
 
+    /**
+     * Setter method for starred items
+     * @param starredItems
+     */
     public void setStarredItems(ArrayList<StarredItem> starredItems) {
         this.starredItems = starredItems;
     }
 
+    /**
+     * Method to add a starred item
+     * @param nameOfGym
+     * @param addressOfGym
+     */
     public void addStarredItem(String nameOfGym, String addressOfGym) {
         if(getStarredItems()==null){
             starredItems = new ArrayList<StarredItem>();
@@ -145,6 +228,10 @@ public class User implements Parcelable{
         }
     }
 
+    /**
+     * Method to remove a starred item
+     * @param nameOfGym
+     */
     public void removeStarredItem(String nameOfGym) {
         int i;
         for (i=0;i<starredItems.size();i++){
@@ -155,14 +242,26 @@ public class User implements Parcelable{
         }
     }
 
+    /**
+     * Method to remove all starred items
+     * @param starredItem
+     */
     public void clearStarredItem(StarredItem starredItem) {
         this.starredItems = new ArrayList<StarredItem>();
     }
 
+    /**
+     * Getter method to check if height and weight have been initialised
+     * @return
+     */
     public boolean isHeightWeightInitialized() {
         return isHeightWeightInitialized;
     }
 
+    /**
+     * Setter method to set if height and weight have been initialised
+     * @param isHeightWeightInitialized
+     */
     public void setHeightWeightInitialized(boolean isHeightWeightInitialized) {
         this.isHeightWeightInitialized = isHeightWeightInitialized;
     }

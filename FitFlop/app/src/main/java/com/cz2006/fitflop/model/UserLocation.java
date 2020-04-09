@@ -8,6 +8,9 @@ import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 
+/**
+ * Class to get the user's current location
+ */
 public class UserLocation implements Parcelable {
 
     private User user;
@@ -15,15 +18,25 @@ public class UserLocation implements Parcelable {
     private @ServerTimestamp
     Date timestamp;
 
+    /**
+     * Constructor
+     * @param user
+     * @param geo_point
+     * @param timestamp
+     */
     public UserLocation(User user, GeoPoint geo_point, Date timestamp) {
         this.user = user;
         this.geo_point = geo_point;
         this.timestamp = timestamp;
     }
 
+    /**
+     * Constructor
+     */
     public UserLocation() {
 
     }
+
 
     protected UserLocation(Parcel in) {
         user = in.readParcelable(User.class.getClassLoader());
@@ -41,26 +54,50 @@ public class UserLocation implements Parcelable {
         }
     };
 
+    /**
+     * Getter method for current user
+     * @return
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Setter method for current user
+     * @param user
+     */
     public void setUser(User user) {
         this.user = user;
     }
 
+    /**
+     * Getter method for current location
+     * @return
+     */
     public GeoPoint getGeo_point() {
         return geo_point;
     }
 
+    /**
+     * Setter method for current location
+     * @param geo_point
+     */
     public void setGeo_point(GeoPoint geo_point) {
         this.geo_point = geo_point;
     }
 
+    /**
+     * Getter method for time stamp
+     * @return
+     */
     public Date getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Setter method for timestamp
+     * @param timestamp
+     */
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
